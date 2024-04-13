@@ -21,3 +21,6 @@ augroup END]])
 
 -- info.vim
 vim.b.infoprg = "/usr/bin/info"
+
+-- disable swap files
+vim.opt.swapfile = false

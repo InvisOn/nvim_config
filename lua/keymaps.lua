@@ -1,45 +1,50 @@
 vim.g.mapleader = " "
 
--- keybinds
--- " " Copy to clipboard
-vim.cmd('noremap  <leader>y  "+y') -- copy selection
-vim.cmd('nnoremap  <leader>Y  "+yg_') -- copy selection
-vim.cmd('nnoremap  <leader>y  "+y') -- copy selection
-vim.cmd('nnoremap  <leader>yy  "+yy') -- copy selection
+-- jump between buffers
+vim.api.nvim_set_keymap("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+vim.api.nvim_set_keymap("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 
--- " " Paste from clipboard
-vim.cmd('nnoremap <leader>p "+p')
-vim.cmd('nnoremap <leader>P "+P')
-vim.cmd('vnoremap <leader>p "+p')
-vim.cmd('vnoremap <leader>P "+P')
+-- compiler.nvim
+vim.api.nvim_set_keymap("n", "<F6>", "<CMD>CompilerOpen<CR>", { noremap = true, silent = true, desc = "Open compiler" })
+vim.api.nvim_set_keymap(
+	"n",
+	"<F7>",
+	"<CMD>CompilerToggleResults<CR>",
+	{ noremap = true, silent = true, desc = "Toggle compiler pane" }
+)
+vim.api.nvim_set_keymap("n", "<F8>", "<CMD>CompilerStop<CR>", { noremap = true, silent = true, desc = "Stop compiler" })
+vim.api.nvim_set_keymap(
+	"n",
+	"<F9>",
+	"<CMD>CompilerToggleResults<CR><CMD>CompilerStop<CR>",
+	{ noremap = true, silent = true, desc = "Stop compiler and toggle pane" }
+)
 
 vim.api.nvim_create_user_command("Nrc", ":e /home/aj/.config/nvim/init.lua | cd /home/aj/.config/nvim/", {})
 vim.api.nvim_create_user_command("Frc", ":e /home/aj/.config/fish/config.fish", {})
 
--- vim.keymap.set("i", "<leader><leader>", "<Esc>") -- close current active buffer
-vim.keymap.set("n", "<leader>q", ":bd!<CR>") -- close current active buffer
-vim.keymap.set("n", "<leader>d", ":noh<CR>") -- deselect search
--- vim.keymap.set("n", "<leader>t", ":term<CR>") -- deselect search
+vim.api.nvim_set_keymap("n", "<leader>q", ":bd!<CR>", { desc = "Close current active buffer" }) -- close current active buffer
+-- vim.keymap.set("n", "<leader>d", ":noh<CR>") -- deselect search
+vim.api.nvim_set_keymap("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" }) -- deselect search
 
 -- move (selected) lines up or down
-vim.cmd("nnoremap <c-k> :m .-2<CR>==") -- up
-vim.cmd("nnoremap <c-j> :m .+1<CR>==") -- down
+vim.api.nvim_set_keymap("n", "C-k", ":m .-2<CR>==", { noremap = true, silent = true, desc = "Move line up" }) -- move line up
+vim.api.nvim_set_keymap("n", "C-j", ":m .+1<CR>==", { noremap = true, silent = true, desc = "Move line down" }) -- move line down
 
-vim.cmd("inoremap <c-k> <Esc>:m .-2<CR>==gi") -- up
-vim.cmd("inoremap <c-j> <Esc>:m .+1<CR>==gi") -- down
+vim.api.nvim_set_keymap("i", "C-k", "<Esc>:m .-2<CR>==gi", { noremap = true, silent = true, desc = "Move line up" }) -- move line up
+vim.api.nvim_set_keymap("i", "C-j", "<Esc>:m .+1<CR>==gi", { noremap = true, silent = true, desc = "Move line down" }) -- move line down
 
-vim.cmd("vnoremap <c-k> :m '<-2<CR>gv=gv") -- up
-vim.cmd("vnoremap <c-j> :m '>+1<CR>gv=gv") -- down
+vim.api.nvim_set_keymap("v", "C-k", ":m '<-2<CR>gv=gv", { noremap = true, silent = true, desc = "Move line up" }) -- move line up
+vim.api.nvim_set_keymap("v", "C-j", ":m '>+1<CR>gv=gv", { noremap = true, silent = true, desc = "Move line down" }) -- move line down
 
 -- fugitive
-vim.api.nvim_set_keymap("n", "<leader>gc", ":Git commit<CR>", {})
-vim.api.nvim_set_keymap("n", "<leader>ga", ":Git add %:p<CR>", {})
+vim.api.nvim_set_keymap("n", "<leader>gc", ":Git add %:p<CR>:Git commit<CR>", { desc = "Git commit" })
 
 vim.api.nvim_set_keymap(
 	"n",
 	"<leader>gx",
 	"<CMD>execute '!xdg-open ' .. shellescape(expand('<cfile>'), v:true)<CR><CR>",
-	{}
+	{ desc = "Open file in default program or link browser" }
 )
 
 function Google()
@@ -63,7 +68,8 @@ function Google()
 		selection = selection .. " " .. string.sub(lines[#lines], 1, end_pos[2] + 1)
 	end
 
-	vim.fn.system('firefox "https://www.google.com/search?q={}"', selection)
+	vim.cmd(":echo '" .. selection .. "'")
+	vim.fn.system("xargs -i firefox 'https://www.google.com/search?q={}'", selection)
 end
 
-vim.cmd("vnoremap <leader>g :lua Google()<CR>")
+vim.api.nvim_set_keymap("v", "<leader>g", ":lua Google()<CR>", { noremap = true, desc = "Google selection" })

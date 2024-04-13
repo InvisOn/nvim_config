@@ -34,6 +34,7 @@ return {
 
 			local lspconfig = require("lspconfig")
 			lspconfig.biome.setup({ capabilities = capabilities })
+			lspconfig.gopls.setup({ capabilities = capabilities })
 			lspconfig.clangd.setup({ capabilities = capabilities })
 			lspconfig.jdtls.setup({ capabilities = capabilities })
 			lspconfig.julials.setup({ capabilities = capabilities })

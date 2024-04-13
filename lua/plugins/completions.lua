@@ -5,15 +5,32 @@ return {
         config = true,
     },
     {
-        "github/copilot.vim",
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        event = "InsertEnter",
         config = function()
-            vim.keymap.set("i", "<leader>d", 'copilot#Accept("\\<CR>")', {
-                expr = true,
-                replace_keycodes = false,
+            require("copilot").setup({
+                suggestion = { enabled = false, auto_trigger = true },
+                panel = { enabled = false, auto_refresh = true },
             })
-            vim.g.copilot_no_tab_map = true
         end,
     },
+    {
+        "zbirenbaum/copilot-cmp",
+        config = function()
+            require("copilot_cmp").setup()
+        end,
+    },
+    -- {
+    --     "github/copilot.vim",
+    --     config = function()
+    --         vim.keymap.set("i", "<leader>d", 'copilot#Accept("\\<CR>")', {
+    --             expr = true,
+    --             replace_keycodes = false,
+    --         })
+    --         vim.g.copilot_no_tab_map = true
+    --     end,
+    -- },
     {
         "L3MON4D3/LuaSnip",
         lazy = false,
@@ -64,7 +81,7 @@ return {
                     ["<C-f>"] = cmp.mapping.scroll_docs(4),
                     ["<C-Space>"] = cmp.mapping.complete(),
                     ["<C-e>"] = cmp.mapping.abort(),
-                    ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                    ["<C-k>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.select_next_item()
@@ -91,9 +108,11 @@ return {
                 }),
                 sources = cmp.config.sources({
                     { name = "nvim_lsp" },
-                    { name = "luasnip" }, -- For luasnip users.
+                    { name = "luasnip" },
                     { name = "buffer" },
+                    { name = "otter" },
                     { name = "path" },
+                    { name = "copilot" },
                 }),
             })
 

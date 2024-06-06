@@ -109,9 +109,9 @@ return {
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "buffer" },
-					{ name = "otter" },
 					{ name = "path" },
 					{ name = "copilot" },
+					{ name = "otter" },
 				}),
 			})
 

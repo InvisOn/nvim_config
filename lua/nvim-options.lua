@@ -27,3 +27,7 @@ vim.opt.swapfile = false
 
 -- copy to system clipboard with "+y
 vim.api.nvim_set_option("clipboard", "unnamed")
+
+vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#CCCCCC" })
+vim.api.nvim_set_hl(0, "LineNr", { fg = "white" })
+vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#CCCCCC" })

@@ -20,11 +20,8 @@ vim.cmd([[augroup HelpLineNumber
   autocmd FileType man setlocal relativenumber
 augroup END]])
 
--- info.vim
-vim.b.infoprg = "/usr/bin/info"
-
 -- disable swap files
-vim.opt.swapfile = false
+vim.opt.swapfile = true
 
 -- copy to system clipboard with "+y
 vim.api.nvim_set_option("clipboard", "unnamed")

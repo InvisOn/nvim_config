@@ -5,21 +5,18 @@ return {
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
             local builtin = require("telescope.builtin")
-            vim.keymap.set("n", "<Leader>ff", function()
-                builtin.find_files()
-            end, { desc = "Telescope find files" })
-            vim.keymap.set("n", "<Leader>s", function()
-                builtin.live_grep()
-            end, { desc = "Telescope live grep" })
+
+            vim.keymap.set("n", "<Leader>ff", builtin.find_files, { desc = "Telescope find files" })
+
+            vim.keymap.set("n", "<Leader>lg", builtin.live_grep, { desc = "Telescope live grep" })
+
             vim.keymap.set("n", "<Leader><Tab>", function()
                 builtin.buffers({ show_all_buffers = false, sort_mru = true })
             end, { desc = "Telescope buffers" })
-            vim.keymap.set("n", "<Leader>kk", function()
-                builtin.keymaps()
-            end, { desc = "Telescope keymaps" })
-            vim.api.nvim_create_user_command("Help", function()
-                builtin.live_grep({ cwd = "/tmp/.mount_nvim*/usr/share/nvim/runtime/doc/" })
-            end, { desc = "Telescope help" })
+
+            vim.keymap.set("n", "<Leader>kk", builtin.keymaps, { desc = "Telescope keymaps" })
+
+            vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Help tags" })
         end,
     },
     {

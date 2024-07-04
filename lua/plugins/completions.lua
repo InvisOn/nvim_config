@@ -121,19 +121,19 @@ return {
 					end, { "i", "s" }),
 				}),
 				sources = cmp.config.sources({
-					{ name = "buffer", keyword_length = 5, max_item_count = 3 },
+					{ name = "buffer" },
 					{ name = "calc" },
 					{ name = "copilot" },
 					{ name = "emoji" },
 					{ name = "latex_symbols" },
-					{ name = "luasnip", keyword_length = 3, max_item_count = 3 },
+					{ name = "luasnip" },
 					{ name = "nvim_lsp" },
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "otter" },
 					{ name = "pandoc_references" },
 					{ name = "path" },
 					{ name = "spell" },
-					{ name = "treesitter", keyword_length = 5, max_item_count = 3 },
+					{ name = "treesitter" },
 				}),
 			})
 

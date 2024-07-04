@@ -6,31 +6,31 @@ return {
         end,
     },
 
-    {
-        -- for lsp features in code cells / embedded code
-        "jmbuhr/otter.nvim",
-        lazy = true,
-        dev = false,
-        dependencies = {
-            {
-                "neovim/nvim-lspconfig",
-                "nvim-treesitter/nvim-treesitter",
-                "hrsh7th/nvim-cmp",
-            },
-        },
-        opts = {
-            lsp = {
-                hover = {
-                    border = require("misc.style").border,
-                },
-            },
-            buffers = {
-                set_filetype = true,
-                write_to_disk = false,
-            },
-            handle_leading_whitespace = true,
-        },
-    },
+    -- {
+    -- 	-- for lsp features in code cells / embedded code
+    -- 	"jmbuhr/otter.nvim",
+    -- 	lazy = true,
+    -- 	dev = false,
+    -- 	dependencies = {
+    -- 		{
+    -- 			"neovim/nvim-lspconfig",
+    -- 			"nvim-treesitter/nvim-treesitter",
+    -- 			"hrsh7th/nvim-cmp",
+    -- 		},
+    -- 	},
+    -- 	opts = {
+    -- 		lsp = {
+    -- 			hover = {
+    -- 				border = require("misc.style").border,
+    -- 			},
+    -- 		},
+    -- 		buffers = {
+    -- 			set_filetype = true,
+    -- 			write_to_disk = false,
+    -- 		},
+    -- 		handle_leading_whitespace = true,
+    -- 	},
+    -- },
 
     {
         "williamboman/mason-lspconfig.nvim",
@@ -82,7 +82,10 @@ return {
             lspconfig.biome.setup({ capabilities = default_capabilities })
             lspconfig.ltex.setup({ capabilities = default_capabilities })
             lspconfig.gopls.setup({ capabilities = default_capabilities })
-            lspconfig.clangd.setup({ capabilities = default_capabilities })
+            lspconfig.clangd.setup({
+                capabilities = default_capabilities,
+                cmd = { "clangd", "--offset-encoding=utf-16" },
+            })
             lspconfig.jdtls.setup({ capabilities = default_capabilities })
             lspconfig.julials.setup({ capabilities = default_capabilities })
             lspconfig.kotlin_language_server.setup({ capabilities = default_capabilities })
@@ -372,6 +375,9 @@ return {
         config = function()
             local null_ls = require("null-ls")
             null_ls.setup({
+                -- on_init = function(new_client, _)
+                --     new_client.offset_encoding = "utf-32"
+                -- end,
                 sources = {
                     -- null_ls.builtins.completion.spell,
                     -- null_ls.builtins.diagnostics.biome,

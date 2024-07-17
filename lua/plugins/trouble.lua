@@ -1,22 +1,43 @@
 return {
-    "folke/trouble.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = {},
-    config = function()
-        vim.keymap.set("n", "<leader>xx", function()
-            require("trouble").toggle("diagnostics")
-        end, { desc = "Trouble toggle" })
-
-        vim.keymap.set("n", "<leader>xq", function()
-            require("trouble").toggle("quickfix")
-        end, { desc = "Trouble toggle quickfix" })
-
-        vim.keymap.set("n", "<leader>xl", function()
-            require("trouble").toggle("loclist")
-        end, { desc = "Trouble toggle loclist" })
-
-        vim.keymap.set("n", "gR", function()
-            require("trouble").toggle("lsp_references")
-        end, { desc = "Trouble toggle LSP references" })
-    end,
+  "folke/trouble.nvim",
+  lazy = false,
+  dependencies = { "nvim-tree/nvim-web-devicons" },
+  opts = {},
+  keys = {
+    {
+      "<leader>x",
+      "<CMD>Trouble<CR>",
+      desc = "Trouble",
+    },
+    {
+      "<leader>xx",
+      "<CMD>Trouble diagnostics toggle<CR>",
+      desc = "Diagnostics (Trouble)",
+    },
+    {
+      "<leader>xX",
+      "<CMD>Trouble diagnostics toggle filter.buf=0<CR>",
+      desc = "Buffer Diagnostics (Trouble)",
+    },
+    {
+      "<leader>xs",
+      "<CMD>Trouble symbols toggle focus=false<CR>",
+      desc = "Symbols (Trouble)",
+    },
+    {
+      "<leader>xl",
+      "<CMD>Trouble lsp toggle focus=false win.position=right<CR>",
+      desc = "LSP Definitions / references / ... (Trouble)",
+    },
+    {
+      "<leader>xL",
+      "<CMD>Trouble loclist toggle<CR>",
+      desc = "Location List (Trouble)",
+    },
+    {
+      "<leader>xq",
+      "<CMD>Trouble qflist toggle<CR>",
+      desc = "Quickfix List (Trouble)",
+    },
+  },
 }

@@ -1,5 +1,6 @@
 return {
 	"Vigemus/iron.nvim",
+	lazy = false,
 	config = function()
 		local iron = require("iron.core")
 
@@ -31,7 +32,7 @@ return {
 				mark_motion = "<space>mc",
 				mark_visual = "<space>mc",
 				remove_mark = "<space>md",
-				cr = "<space>s<cr>",
+				cr = "<space>s<CR>",
 				interrupt = "<space>s<space>",
 				exit = "<space>sq",
 				clear = "<space>cl",
@@ -45,9 +46,9 @@ return {
 		})
 
 		-- iron also has a list of commands, see :h iron-commands for all available commands
-		vim.keymap.set("n", "<space>rs", "<cmd>IronRepl<cr>", { desc = "Open REPL" })
-		vim.keymap.set("n", "<space>rr", "<cmd>IronRestart<cr>", { desc = "Restart REPL" })
-		vim.keymap.set("n", "<space>rf", "<cmd>IronFocus<cr>", { desc = "Focus REPL" })
-		vim.keymap.set("n", "<space>rh", "<cmd>IronHide<cr>", { desc = "Hide REPL" })
+		vim.keymap.set("n", "<space>rs", "<cmd>IronRepl<CR>", { desc = "Open REPL" })
+		vim.keymap.set("n", "<space>rrs", "<cmd>IronRestart<CR>", { desc = "Restart REPL" })
+		vim.keymap.set("n", "<space>rf", "<cmd>IronFocus<CR>", { desc = "Focus REPL" })
+		vim.keymap.set("n", "<space>rh", "<cmd>IronHide<CR>", { desc = "Hide REPL" })
 	end,
 }

@@ -47,31 +47,33 @@ return {
 				runner.run_all(true)
 			end, { desc = "run all cells of all languages", silent = true })
 		end,
-		lazy = true,
+		lazy = false,
 	},
 
-	{ -- directly open ipynb files as quarto docuements
-		-- and convert back behind the scenes
-		"GCBallesteros/jupytext.nvim",
-		opts = {
-			custom_language_formatting = {
-				python = {
-					extension = "qmd",
-					style = "quarto",
-					force_ft = "quarto",
-				},
-				r = {
-					extension = "qmd",
-					style = "quarto",
-					force_ft = "quarto",
-				},
-			},
-		},
-	},
+	-- { -- directly open ipynb files as quarto docuements
+	-- 	-- and convert back behind the scenes
+	-- 	"GCBallesteros/jupytext.nvim",
+	--   lazy = false,
+	-- 	opts = {
+	-- 		custom_language_formatting = {
+	-- 			python = {
+	-- 				extension = "qmd",
+	-- 				style = "quarto",
+	-- 				force_ft = "quarto",
+	-- 			},
+	-- 			r = {
+	-- 				extension = "qmd",
+	-- 				style = "quarto",
+	-- 				force_ft = "quarto",
+	-- 			},
+	-- 		},
+	-- 	},
+	-- },
 
 	{ -- send code from python/r/qmd documets to a terminal or REPL
 		-- like ipython, R, bash
 		"jpalardy/vim-slime",
+		lazy = false,
 		dev = false,
 		init = function()
 			vim.b["quarto_is_python_chunk"] = false
@@ -122,6 +124,7 @@ return {
 	{
 		"benlubas/molten-nvim",
 		enabled = false,
+		lazy = false,
 		build = ":UpdateRemotePlugins",
 		init = function()
 			vim.g.molten_image_provider = "image.nvim"
@@ -142,6 +145,7 @@ return {
 
 	{ -- terminal
 		"akinsho/toggleterm.nvim",
+		lazy = false,
 		opts = {
 			open_mapping = [[<c-\>]],
 			direction = "float",
@@ -150,6 +154,7 @@ return {
 
 	{ -- highlight markdown headings and code blocks etc.
 		"lukas-reineke/headlines.nvim",
+		lazy = false,
 		enabled = false,
 		dependencies = "nvim-treesitter/nvim-treesitter",
 		config = function()

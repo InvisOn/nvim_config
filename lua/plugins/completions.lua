@@ -4,33 +4,31 @@ return {
 		lazy = false,
 		config = true,
 	},
+
 	{
 		"zbirenbaum/copilot.lua",
 		cmd = "Copilot",
 		event = "InsertEnter",
+		lazy = false,
 		config = function()
 			require("copilot").setup({
 				suggestion = { enabled = false, auto_trigger = true },
 				panel = { enabled = false, auto_refresh = true },
+				filetypes = {
+					c = false,
+				},
 			})
 		end,
 	},
+
 	{
 		"zbirenbaum/copilot-cmp",
+		lazy = false,
 		config = function()
 			require("copilot_cmp").setup()
 		end,
 	},
-	-- {
-	--     "github/copilot.vim",
-	--     config = function()
-	--         vim.keymap.set("i", "<leader>d", 'copilot#Accept("\\<CR>")', {
-	--             expr = true,
-	--             replace_keycodes = false,
-	--         })
-	--         vim.g.copilot_no_tab_map = true
-	--     end,
-	-- },
+
 	{
 		"L3MON4D3/LuaSnip",
 		lazy = false,
@@ -42,6 +40,7 @@ return {
 			require("luasnip.loaders.from_vscode").lazy_load()
 		end,
 	},
+
 	{
 		"hrsh7th/nvim-cmp",
 		event = { "InsertEnter", "CmdlineEnter" },
@@ -123,17 +122,17 @@ return {
 				sources = cmp.config.sources({
 					{ name = "buffer" },
 					{ name = "calc" },
-					{ name = "copilot" },
-					{ name = "emoji" },
 					{ name = "latex_symbols" },
 					{ name = "luasnip" },
 					{ name = "nvim_lsp" },
 					{ name = "nvim_lsp_signature_help" },
+					{ name = "treesitter" },
 					{ name = "otter" },
 					{ name = "pandoc_references" },
 					{ name = "path" },
 					{ name = "spell" },
-					{ name = "treesitter" },
+					{ name = "copilot" },
+					{ name = "emoji" },
 				}),
 			})
 

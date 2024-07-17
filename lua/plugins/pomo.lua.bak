@@ -28,7 +28,7 @@ return {
 						local clamped_volume = math.max(0, math.min(100, human_volume))
 						local paplay_volume = math.floor(clamped_volume * 655.36)
 
-						local path = "/home/aj/.config/nvim/lua/plugins/pomo_assets/153212__freezeman__beep2.wav"
+						local path = "~/.config/nvim/lua/plugins/pomo_assets/153212__freezeman__beep2.wav"
 
 						vim.fn.system(string.format("paplay %s --volume=%d &", path, paplay_volume))
 

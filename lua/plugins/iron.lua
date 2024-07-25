@@ -6,19 +6,25 @@ return {
 
 		iron.setup({
 			config = {
+				close_window_on_exit = true,
 				-- Whether a repl should be discarded or not
 				scratch_repl = true,
 				-- Your repl definitions come here
 				repl_definition = {
+					python = require("iron.fts.python").ipython,
+					ocaml = {
+						command = { "utop" },
+					},
 					sh = {
 						-- Can be a table or a function that
 						-- returns a table (see below)
-						command = { "zsh" },
+						command = { "fish" },
 					},
 				},
 				-- How the repl window will be displayed
 				-- See below for more information
-				repl_open_cmd = require("iron.view").bottom(0.40),
+				-- repl_open_cmd = require("iron.view").bottom(0.30),
+				repl_open_cmd = "belowright 15 split",
 			},
 			-- Iron doesn't set keymaps by default anymore.
 			-- You can set them here or manually add keymaps to the functions in iron.core
@@ -39,10 +45,11 @@ return {
 			},
 			-- If the highlight is on, you can change how it looks
 			-- For the available options, check nvim_set_hl
-			highlight = {
-				italic = true,
-			},
-			ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+			-- highlight = false,
+			-- highlight = {
+			-- 	italic = true,
+			-- },
+			ignore_blank_lines = false, -- ignore blank lines when sending visual select lines
 		})
 
 		-- iron also has a list of commands, see :h iron-commands for all available commands

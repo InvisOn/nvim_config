@@ -1,5 +1,9 @@
 vim.g.mapleader = " "
 
+-- copied from
+vim.keymap.set("n", "<leader>coff", ":Copilot disable<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+vim.keymap.set("n", "<leader>coon", ":Copilot enable<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+
 -- jump between buffers
 vim.keymap.set("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 vim.keymap.set("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
@@ -11,50 +15,50 @@ vim.keymap.set("n", "<leader>e", ":make<CR>", { desc = "Make run" })            
 
 -- fugitive
 local function git_add_current()
-  vim.api.nvim_command("Git add %")
-  vim.api.nvim_command("Git commit")
-  vim.api.nvim_command("startinsert")
+    vim.api.nvim_command("Git add %")
+    vim.api.nvim_command("Git commit")
+    vim.api.nvim_command("startinsert")
 end
 
 vim.keymap.set("n", "<leader>gc", git_add_current, { desc = "Git commit" })
 
 vim.keymap.set(
-  "n",
-  "<leader>gx",
-  "<CMD>execute '!xdg-open ' .. shellescape(expand('<cfile>'), v:true)<CR><CR>",
-  { desc = "Open file in default program or link browser" }
+    "n",
+    "<leader>gx",
+    "<CMD>execute '!xdg-open ' .. shellescape(expand('<cfile>'), v:true)<CR><CR>",
+    { desc = "Open file in default program or link browser" }
 )
 
 function Search_internet()
-  -- get visual selection and search it on the internet
-  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
-  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
-  local lines = vim.api.nvim_buf_get_lines(0, start_pos[1] - 1, end_pos[1], false)
+    -- get visual selection and search it on the internet
+    local start_pos = vim.api.nvim_buf_get_mark(0, "<")
+    local end_pos = vim.api.nvim_buf_get_mark(0, ">")
+    local lines = vim.api.nvim_buf_get_lines(0, start_pos[1] - 1, end_pos[1], false)
 
-  if #lines == 0 then
-    return
-  end
-
-  local selection = ""
-  if #lines == 1 then
-    selection = string.sub(lines[1], start_pos[2] + 1, end_pos[2] + 1)
-  else
-    selection = string.sub(lines[1], start_pos[2] + 1)
-    for i = 2, #lines - 1 do
-      selection = selection .. " " .. lines[i]
+    if #lines == 0 then
+        return
     end
-    selection = selection .. " " .. string.sub(lines[#lines], 1, end_pos[2] + 1)
-  end
 
-  vim.CMD(":echo '" .. selection .. "'")
-  vim.fn.system("xargs -i firefox 'https://kagi.com/search?q='{}", selection)
+    local selection = ""
+    if #lines == 1 then
+        selection = string.sub(lines[1], start_pos[2] + 1, end_pos[2] + 1)
+    else
+        selection = string.sub(lines[1], start_pos[2] + 1)
+        for i = 2, #lines - 1 do
+            selection = selection .. " " .. lines[i]
+        end
+        selection = selection .. " " .. string.sub(lines[#lines], 1, end_pos[2] + 1)
+    end
+
+    vim.CMD(":echo '" .. selection .. "'")
+    vim.fn.system("xargs -i firefox 'https://kagi.com/search?q='{}", selection)
 end
 
 vim.keymap.set(
-  "v",
-  "<leader>g",
-  ":lua Search_internet()<CR>",
-  { noremap = true, desc = "Search for the selelected text with Kagi" }
+    "v",
+    "<leader>g",
+    ":lua Search_internet()<CR>",
+    { noremap = true, desc = "Search for the selelected text with Kagi" }
 )
 
 vim.keymap.set("v", "<leader>y", '"+y', { noremap = true, desc = "Copy selection to clipboard" })
@@ -63,43 +67,43 @@ vim.keymap.set("n", "<leader>P", '"+p', { noremap = true, desc = "Paste clipboar
 vim.keymap.set("n", "<Leader>t", ":TodoTelescope<CR>", { desc = "Telescop TODO" })
 
 local is_code_chunk = function()
-  local current, _ = require("otter.keeper").get_current_language_context()
-  if current then
-    return true
-  else
-    return false
-  end
+    local current, _ = require("otter.keeper").get_current_language_context()
+    if current then
+        return true
+    else
+        return false
+    end
 end
 
 --- Insert code chunk of given language
 --- Splits current chunk if already within a chunk
 --- @param lang string
 local insert_code_chunk = function(lang)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
 
-  local keys
+    local keys
 
-  if is_code_chunk() then
-    keys = [[o```<CR><CR>```{]] .. lang .. [[}<esc>o]]
-  else
-    keys = [[o```{]] .. lang .. [[}<CR>```<esc>O]]
-  end
+    if is_code_chunk() then
+        keys = [[o```<CR><CR>```{]] .. lang .. [[}<esc>o]]
+    else
+        keys = [[o```{]] .. lang .. [[}<CR>```<esc>O]]
+    end
 
-  keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
+    keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
 
-  vim.api.nvim_feedkeys(keys, "n", false)
+    vim.api.nvim_feedkeys(keys, "n", false)
 end
 
 local insert_r_chunk = function()
-  insert_code_chunk("r")
+    insert_code_chunk("r")
 end
 
 local insert_py_chunk = function()
-  insert_code_chunk("python")
+    insert_code_chunk("python")
 end
 
 local insert_julia_chunk = function()
-  insert_code_chunk("julia")
+    insert_code_chunk("julia")
 end
 
 vim.keymap.set("n", "<leader>ir", insert_r_chunk, { desc = "Insert R code chunk" })
@@ -108,24 +112,24 @@ vim.keymap.set("n", "<leader>ij", insert_julia_chunk, { desc = "Insert Julia cod
 
 -- Open compiler
 vim.api.nvim_set_keymap(
-  "n",
-  "<leader>co",
-  "<CMD>CompilerOpen<CR>",
-  { noremap = true, silent = true, desc = "Open compiler" }
+    "n",
+    "<leader>co",
+    "<CMD>CompilerOpen<CR>",
+    { noremap = true, silent = true, desc = "Open compiler" }
 )
 
 -- Redo last selected option
 vim.api.nvim_set_keymap(
-  "n",
-  "<leader>c",
-  "<CMD>CompilerStop<CR><CMD>CompilerRedo<CR>",
-  { noremap = true, silent = true, desc = "Redo last selected option compiler" }
+    "n",
+    "<leader>c",
+    "<CMD>CompilerStop<CR><CMD>CompilerRedo<CR>",
+    { noremap = true, silent = true, desc = "Redo last selected option compiler" }
 )
 
 -- Toggle compiler results
 vim.api.nvim_set_keymap(
-  "n",
-  "<leader>ct",
-  "<CMD>CompilerToggleResults<CR>",
-  { noremap = true, silent = true, desc = "Toggle compiler results" }
+    "n",
+    "<leader>ct",
+    "<CMD>CompilerToggleResults<CR>",
+    { noremap = true, silent = true, desc = "Toggle compiler results" }
 )

@@ -5,29 +5,29 @@ return {
 		config = true,
 	},
 
-	-- {
-	-- 	"zbirenbaum/copilot.lua",
-	-- 	cmd = "Copilot",
-	-- 	event = "InsertEnter",
-	-- 	lazy = false,
-	-- 	config = function()
-	-- 		require("copilot").setup({
-	-- 			suggestion = { enabled = false, auto_trigger = true },
-	-- 			panel = { enabled = false, auto_refresh = true },
-	-- 			filetypes = {
-	-- 				c = false,
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
-	--
-	-- {
-	-- 	"zbirenbaum/copilot-cmp",
-	-- 	lazy = false,
-	-- 	config = function()
-	-- 		require("copilot_cmp").setup()
-	-- 	end,
-	-- },
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		lazy = false,
+		config = function()
+			require("copilot").setup({
+				suggestion = { enabled = false, auto_trigger = true },
+				panel = { enabled = false, auto_refresh = true },
+				filetypes = {
+					c = false,
+				},
+			})
+		end,
+	},
+
+	{
+		"zbirenbaum/copilot-cmp",
+		lazy = false,
+		config = function()
+			require("copilot_cmp").setup()
+		end,
+	},
 
 	{
 		"L3MON4D3/LuaSnip",
@@ -131,7 +131,7 @@ return {
 					{ name = "pandoc_references" },
 					{ name = "path" },
 					{ name = "spell" },
-					-- { name = "copilot" },
+					{ name = "copilot" },
 					{ name = "emoji" },
 				}),
 			})

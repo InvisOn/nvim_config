@@ -1,23 +1,17 @@
 vim.g.mapleader = " "
 
-vim.api.nvim_set_keymap("t", "<ESC>", "<C-\\><C-n>", { noremap = true, desc = "Go to normal mode from terminal mode." })
+vim.api.nvim_set_keymap("t", "<ESC>", "<C-\\><C-n>", { noremap = true, desc = "Go to normal mode from terminal mode" })
 vim.api.nvim_set_keymap("n", "<leader>O", "z=", { noremap = true, desc = "Fix typo (extended)" })
 vim.api.nvim_set_keymap("n", "<leader>o", "1z=", { noremap = true, desc = "Fix typo" })
-
-vim.api.nvim_set_keymap("n", "<leader>j", "<space>30j", { noremap = true, desc = "Go down 30 lines." })
-vim.api.nvim_set_keymap("n", "<leader>k", "<space>30k", { noremap = true, desc = "Go up 30 lines." })
-
--- vim.keymap.set("n", "<leader>coff", ":Copilot disable<CR>", { noremap = true, silent = true, desc = "Next buffer" })
--- vim.keymap.set("n", "<leader>coon", ":Copilot enable<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 
 -- jump between buffers
 vim.keymap.set("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 vim.keymap.set("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 
-vim.keymap.set("n", "<leader>q", ":bd<CR>", { desc = "Close current active buffer" }) -- close current active buffer
-vim.keymap.set("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" })            -- deselect search
+vim.keymap.set("n", "<leader>q", ":bd<CR>", { desc = "Close current active buffer" })
+vim.keymap.set("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" })
 
-vim.keymap.set("n", "<leader>e", ":make<CR>", { desc = "Make run" })                  -- close current active buffer
+vim.keymap.set("n", "<leader>e", ":make<CR>", { desc = "Make run" })
 
 -- fugitive
 local function git_add_current()
@@ -69,9 +63,9 @@ vim.keymap.set(
 )
 
 vim.keymap.set("v", "<leader>y", '"+y', { noremap = true, desc = "Copy selection to clipboard" })
-vim.keymap.set("n", "<leader>P", '"+p', { noremap = true, desc = "Paste clipboard" })
+vim.keymap.set("n", "<leader>p", '"+p', { noremap = true, desc = "Paste clipboard" })
 
-vim.keymap.set("n", "<Leader>t", ":TodoTelescope<CR>", { desc = "Telescop TODO" })
+vim.keymap.set("n", "<Leader>t", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
 
 local is_code_chunk = function()
   local current, _ = require("otter.keeper").get_current_language_context()

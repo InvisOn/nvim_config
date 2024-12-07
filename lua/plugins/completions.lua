@@ -136,16 +136,6 @@ return {
         }),
       })
 
-      -- cmp.setup.filetype("typst", {
-      -- 	sources = cmp.config.sources({
-      -- 		{ name = "pandoc_references" },
-      -- 		{ name = "buffer" },
-      -- 		{ name = "luasnip" },
-      -- 		{ name = "nvim_lsp" },
-      -- 		{ name = "path" },
-      -- 	}),
-      -- })
-
       cmp.setup.cmdline("/", {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {

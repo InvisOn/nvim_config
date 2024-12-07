@@ -1,2 +1,1 @@
--- obsidian.nvim
--- vim.opt.conceallevel = 0
+vim.opt.spell = true

@@ -6,8 +6,8 @@ vim.opt.showtabline = 0
 vim.opt.autowrite = true
 -- vim.opt.max_line_length = 120
 
-vim.opt.spell = true
-vim.opt.spelllang = "en_us"
+-- `vim.opt.spell = true` is in `ftplugin/`
+vim.opt.spelllang = "en_nz"
 
 vim.cmd("set number")
 vim.opt.relativenumber = true
@@ -35,4 +35,3 @@ vim.filetype.add({
     typ = "typst",
   },
 })
-

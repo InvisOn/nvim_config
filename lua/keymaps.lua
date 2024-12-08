@@ -15,51 +15,46 @@ vim.keymap.set("n", "<leader>e", ":make<CR>", { desc = "Make run" })
 
 -- fugitive
 local function git_add_current()
-  vim.cmd("w")
-  vim.api.nvim_command("Git add %")
-  vim.api.nvim_command("Git commit")
-  vim.api.nvim_command("startinsert")
+	vim.cmd("w")
+	vim.api.nvim_command("Git add %")
+	vim.api.nvim_command("Git commit")
+	vim.api.nvim_command("startinsert")
 end
 
 vim.keymap.set("n", "<leader>gc", git_add_current, { desc = "Git commit" })
 
 vim.keymap.set(
-  "n",
-  "<leader>gx",
-  "<CMD>execute '!xdg-open ' .. shellescape(expand('<cfile>'), v:true)<CR><CR>",
-  { desc = "Open file in default program or link browser" }
+	"n",
+	"<leader>gx",
+	"<CMD>execute '!xdg-open ' .. shellescape(expand('<cfile>'), v:true)<CR><CR>",
+	{ desc = "Open file in default program or link browser" }
 )
 
+local function get_visual_selection()
+	local s_start = vim.fn.getpos("'<")
+	local s_end = vim.fn.getpos("'>")
+	local n_lines = math.abs(s_end[2] - s_start[2]) + 1
+	local lines = vim.api.nvim_buf_get_lines(0, s_start[2] - 1, s_end[2], false)
+	lines[1] = string.sub(lines[1], s_start[3], -1)
+	if n_lines == 1 then
+		lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3] - s_start[3] + 1)
+	else
+		lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3])
+	end
+	return table.concat(lines, "\n")
+end
+
 function Search_internet()
-  -- get visual selection and search it on the internet
-  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
-  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
-  local lines = vim.api.nvim_buf_get_lines(0, start_pos[1] - 1, end_pos[1], false)
+	local query = "!firefox 'https://kagi.com/search?q=" .. get_visual_selection() .. "'"
 
-  if #lines == 0 then
-    return
-  end
-
-  local selection = ""
-  if #lines == 1 then
-    selection = string.sub(lines[1], start_pos[2] + 1, end_pos[2] + 1)
-  else
-    selection = string.sub(lines[1], start_pos[2] + 1)
-    for i = 2, #lines - 1 do
-      selection = selection .. " " .. lines[i]
-    end
-    selection = selection .. " " .. string.sub(lines[#lines], 1, end_pos[2] + 1)
-  end
-
-  vim.cmd(":echo '" .. selection .. "'")
-  vim.fn.system("xargs -i firefox 'https://kagi.com/search?q='{}", selection)
+	vim.cmd(query)
 end
 
 vim.keymap.set(
-  "v",
-  "<leader>g",
-  ":lua Search_internet()<CR>",
-  { noremap = true, desc = "Search for the selelected text with Kagi" }
+	"v",
+	"<leader>g",
+	":lua Search_internet()<CR>",
+	{ noremap = true, desc = "Search for the selelected text with Kagi" }
 )
 
 vim.keymap.set("v", "<leader>y", '"+y', { noremap = true, desc = "Copy selection to clipboard" })
@@ -68,43 +63,43 @@ vim.keymap.set("n", "<leader>p", '"+p', { noremap = true, desc = "Paste clipboar
 vim.keymap.set("n", "<Leader>t", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
 
 local is_code_chunk = function()
-  local current, _ = require("otter.keeper").get_current_language_context()
-  if current then
-    return true
-  else
-    return false
-  end
+	local current, _ = require("otter.keeper").get_current_language_context()
+	if current then
+		return true
+	else
+		return false
+	end
 end
 
 --- Insert code chunk of given language
 --- Splits current chunk if already within a chunk
 --- @param lang string
 local insert_code_chunk = function(lang)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
 
-  local keys
+	local keys
 
-  if is_code_chunk() then
-    keys = [[o```<CR><CR>```{]] .. lang .. [[}<esc>o]]
-  else
-    keys = [[o```{]] .. lang .. [[}<CR>```<esc>O]]
-  end
+	if is_code_chunk() then
+		keys = [[o```<CR><CR>```{]] .. lang .. [[}<esc>o]]
+	else
+		keys = [[o```{]] .. lang .. [[}<CR>```<esc>O]]
+	end
 
-  keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
+	keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
 
-  vim.api.nvim_feedkeys(keys, "n", false)
+	vim.api.nvim_feedkeys(keys, "n", false)
 end
 
 local insert_r_chunk = function()
-  insert_code_chunk("r")
+	insert_code_chunk("r")
 end
 
 local insert_py_chunk = function()
-  insert_code_chunk("python")
+	insert_code_chunk("python")
 end
 
 local insert_julia_chunk = function()
-  insert_code_chunk("julia")
+	insert_code_chunk("julia")
 end
 
 vim.keymap.set("n", "<leader>ir", insert_r_chunk, { desc = "Insert R code chunk" })
@@ -112,29 +107,29 @@ vim.keymap.set("n", "<leader>ip", insert_py_chunk, { desc = "Insert Python code 
 vim.keymap.set("n", "<leader>ij", insert_julia_chunk, { desc = "Insert Julia code chunk" })
 
 vim.api.nvim_set_keymap(
-  "n",
-  "<leader>co",
-  "<CMD>CompilerOpen<CR>",
-  { noremap = true, silent = true, desc = "Open compiler" }
+	"n",
+	"<leader>co",
+	"<CMD>CompilerOpen<CR>",
+	{ noremap = true, silent = true, desc = "Open compiler" }
 )
 
 vim.api.nvim_set_keymap(
-  "n",
-  "<leader>c",
-  "<CMD>CompilerStop<CR><CMD>CompilerRedo<CR>",
-  { noremap = true, silent = true, desc = "Redo last selected option compiler" }
+	"n",
+	"<leader>c",
+	"<CMD>CompilerStop<CR><CMD>CompilerRedo<CR>",
+	{ noremap = true, silent = true, desc = "Redo last selected option compiler" }
 )
 
 vim.api.nvim_set_keymap(
-  "n",
-  "<leader>ct",
-  "<CMD>CompilerToggleResults<CR>",
-  { noremap = true, silent = true, desc = "Toggle compiler results" }
+	"n",
+	"<leader>ct",
+	"<CMD>CompilerToggleResults<CR>",
+	{ noremap = true, silent = true, desc = "Toggle compiler results" }
 )
 
 vim.keymap.set(
-  "v",
-  "<leader>wc",
-  [[:s/\w\+/&/gn<CR>:noh<CR>]],
-  { noremap = true, silent = true, desc = "Word count selection." }
+	"v",
+	"<leader>wc",
+	[[:s/\w\+/&/gn<CR>:noh<CR>]],
+	{ noremap = true, silent = true, desc = "Word count selection." }
 )

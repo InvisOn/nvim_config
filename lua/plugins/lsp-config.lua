@@ -68,7 +68,7 @@ return {
           "marksman",
           "nim_langserver",
           "ruff",
-          "rust_analyzer",
+          -- "rust_analyzer",
           "sqlls",
           "zls",
         },
@@ -124,11 +124,10 @@ return {
       lspconfig.nim_langserver.setup({ capabilities = default_capabilities })
       lspconfig.ruff.setup({ capabilities = default_capabilities })
       lspconfig.pyright.setup({ capabilities = default_capabilities })
-      lspconfig.rust_analyzer.setup({ capabilities = default_capabilities })
       lspconfig.sqlls.setup({ capabilities = default_capabilities })
       lspconfig.zls.setup({ capabilities = default_capabilities })
       lspconfig.gleam.setup({ capabilities = default_capabilities })
-      lspconfig.typst_lsp.setup({
+      lspconfig.tinymist.setup({
         capabilities = default_capabilities,
         settings = { exportPdf = "never" },
         on_attach = function()
@@ -309,16 +308,31 @@ return {
       --   flags = lsp_flags
       -- }
 
-      lspconfig.rust_analyzer.setup({
-        capabilities = capabilities,
-        settings = {
-          ["rust-analyzer"] = {
-            diagnostics = {
-              enable = true,
-            },
-          },
-        },
-      })
+      -- lspconfig.rust_analyzer.setup({
+      -- 	capabilities = capabilities,
+      -- 	settings = {
+      -- 		["rust-analyzer"] = {
+      -- 			diagnostics = {
+      -- 				enable = true,
+      -- 			},
+      -- 			-- Add clippy lints for Rust.
+      -- 			checkOnSave = {
+      -- 				allFeatures = true,
+      -- 				command = "clippy",
+      -- 				extraArgs = {
+      -- 					"--",
+      -- 					"--no-deps",
+      -- 					-- "-Wclippy::correctness",
+      -- 					-- "-Wclippy::complexity",
+      -- 					"-Wclippy::redundant_reference",
+      -- 					-- "-Wclippy::style",
+      -- 					-- "-Wclippy::perf",
+      -- 					-- "-Wclippy::pedantic",
+      -- 				},
+      -- 			},
+      -- 		},
+      -- 	},
+      -- })
 
       -- See https://github.com/neovim/neovim/issues/23291
       -- disable lsp watcher.
@@ -453,6 +467,15 @@ return {
           -- }),
         },
       })
+    end,
+  },
+
+  {
+    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    config = function()
+      require("lsp_lines").setup()
+      vim.diagnostic.config({ virtual_lines = false })
+      vim.keymap.set("", "<Leader>l", require("lsp_lines").toggle, { desc = "Toggle lsp_lines" })
     end,
   },
 }

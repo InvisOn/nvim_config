@@ -13,16 +13,6 @@ vim.keymap.set("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" })
 
 vim.keymap.set("n", "<leader>e", ":make<CR>", { desc = "Make run" })
 
--- fugitive
-local function git_add_current()
-	vim.cmd("w")
-	vim.api.nvim_command("Git add %")
-	vim.api.nvim_command("Git commit")
-	vim.api.nvim_command("startinsert")
-end
-
-vim.keymap.set("n", "<leader>gc", git_add_current, { desc = "Git commit" })
-
 vim.keymap.set(
 	"n",
 	"<leader>gx",
@@ -133,3 +123,24 @@ vim.keymap.set(
 	[[:s/\w\+/&/gn<CR>:noh<CR>]],
 	{ noremap = true, silent = true, desc = "Word count selection." }
 )
+
+-- fugitive
+local function git_add_current()
+	vim.cmd("w")
+	vim.api.nvim_command("Git add %")
+	vim.api.nvim_command("Git commit")
+	vim.api.nvim_command("startinsert")
+end
+
+-- Fugative keysbind
+-- Helpful keymaps for Git operations
+vim.keymap.set("n", "<leader>gs", ":Git<CR>")
+vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>")
+vim.keymap.set("n", "<leader>gc", git_add_current, { desc = "Git add and commit current buffer" })
+vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")
+vim.keymap.set("n", "<leader>gm", ":Git mergetool<CR>")
+
+-- Improve diff experience
+vim.opt.diffopt:append("algorithm:patience")
+vim.opt.diffopt:append("indent-heuristic")
+

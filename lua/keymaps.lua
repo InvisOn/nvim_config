@@ -9,6 +9,7 @@ vim.keymap.set("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true, desc
 vim.keymap.set("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 
 vim.keymap.set("n", "<leader>q", ":bd<CR>", { desc = "Close current active buffer" })
+vim.keymap.set("n", "<leader>Q", ":%bd|e#<CR>", { desc = "Close current inactive buffers" })
 vim.keymap.set("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" })
 
 vim.keymap.set("n", "<leader>e", ":make<CR>", { desc = "Make run" })
@@ -143,4 +144,3 @@ vim.keymap.set("n", "<leader>gm", ":Git mergetool<CR>")
 -- Improve diff experience
 vim.opt.diffopt:append("algorithm:patience")
 vim.opt.diffopt:append("indent-heuristic")
-

@@ -421,7 +421,7 @@ return {
 						vim.lsp.buf.type_definition,
 						{ buffer = ev.buf, desc = "LSP go to type definition" }
 					)
-					vim.keymap.set("n", "<leader>lrn", vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename" })
+					-- vim.keymap.set("n", "<leader>lrn", vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename" })
 					vim.keymap.set(
 						{ "n", "v" },
 						"<leader>lca",

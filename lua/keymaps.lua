@@ -8,8 +8,9 @@ vim.api.nvim_set_keymap("n", "<leader>o", "1z=", { noremap = true, desc = "Fix t
 vim.keymap.set("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 vim.keymap.set("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 
-vim.keymap.set("n", "<leader>q", ":bd<CR>", { desc = "Close current active buffer" })
-vim.keymap.set("n", "<leader>Q", ":%bd|e#<CR>", { desc = "Close current inactive buffers" })
+vim.keymap.set("n", "<leader>qt", ":bd<CR>", { desc = "Close current active buffer" })
+vim.keymap.set("n", "<leader>qi", ":%bd|e#<CR>", { desc = "Close current inactive buffers" })
+vim.keymap.set("n", "<leader>qa", ":%bd<CR>", { desc = "Close all buffers" })
 vim.keymap.set("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" })
 
 vim.keymap.set("n", "<leader>e", ":make<CR>", { desc = "Make run" })
@@ -133,12 +134,21 @@ local function git_add_current()
 	vim.api.nvim_command("startinsert")
 end
 
+vim.g.gitblame_display_virtual_text = 0 -- to disable it initially
+local function toggle_git_blame_line()
+	if vim.g.gitblame_display_virtual_text == 0 then
+		vim.g.gitblame_display_virtual_text = 1
+	else
+		vim.g.gitblame_display_virtual_text = 0
+	end
+end
+
 -- Fugative keysbind
 -- Helpful keymaps for Git operations
 vim.keymap.set("n", "<leader>gs", ":Git<CR>")
 vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>")
 vim.keymap.set("n", "<leader>gc", git_add_current, { desc = "Git add and commit current buffer" })
-vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")
+vim.keymap.set("n", "<leader>gb", toggle_git_blame_line)
 vim.keymap.set("n", "<leader>gm", ":Git mergetool<CR>")
 
 -- Improve diff experience

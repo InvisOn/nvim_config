@@ -52,8 +52,6 @@ vim.keymap.set(
 vim.keymap.set("v", "<leader>y", '"+y', { noremap = true, desc = "Copy selection to clipboard" })
 vim.keymap.set("n", "<leader>p", '"+p', { noremap = true, desc = "Paste clipboard" })
 
-vim.keymap.set("n", "<Leader>t", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
-
 local is_code_chunk = function()
 	local current, _ = require("otter.keeper").get_current_language_context()
 	if current then
@@ -134,7 +132,8 @@ local function git_add_current()
 	vim.api.nvim_command("startinsert")
 end
 
-vim.g.gitblame_display_virtual_text = 0 -- to disable it initially
+vim.g.gitblame_display_virtual_text = 0 -- to disable git blame initially
+
 local function toggle_git_blame_line()
 	if vim.g.gitblame_display_virtual_text == 0 then
 		vim.g.gitblame_display_virtual_text = 1
@@ -154,3 +153,7 @@ vim.keymap.set("n", "<leader>gm", ":Git mergetool<CR>")
 -- Improve diff experience
 vim.opt.diffopt:append("algorithm:patience")
 vim.opt.diffopt:append("indent-heuristic")
+
+vim.keymap.set("n", "<Leader>td", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
+vim.api.nvim_set_keymap("n", "<C-t>", "A// TODO: ", { noremap = true, silent = true, desc = "Insert todo comment" })
+vim.api.nvim_set_keymap("i", "<C-t>", "// TODO: ", { noremap = true, silent = true, desc = "Insert todo comment" })

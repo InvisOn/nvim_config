@@ -40,3 +40,4 @@ vim.filetype.add({
 -- 	virtual_text = false,
 -- })
 vim.opt.mousemodel = ""
+vim.opt.fillchars.eob = ""

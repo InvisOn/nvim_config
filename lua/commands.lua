@@ -29,19 +29,3 @@ vim.api.nvim_create_user_command("TypstPin", function()
 		end, 0)
 	end
 end, {})
-
--- local line1 = "    Old text                    Command         New text\n"
--- local line2 = "============================================================================\n"
--- local line3 = "    surr*ound_words             ysiw)           (surround_words)\n"
--- local line4 = '    *make strings               ys$"            "make strings"\n'
--- local line5 = "    [delete ar*ound me!]        ds]             delete around me!\n"
--- local line6 = "    remove <b>HTML t*ags</b>    dst             remove HTML tags\n"
--- local line7 = "    'change quot*es'            cs'\"            \"change quotes\"\n"
--- local line8 = "    <b>or tag* types</b>        csth1<CR>       <h1>or tag types</h1>\n"
--- local line9 = "    delete(functi*on calls)     dsf             function calls\n"
---
--- vim.api.nvim_create_user_command(
--- 	"Surround",
--- 	vim.bo.printf("%s%s%s%s%s%s%s%s%s", line1, line2, line3, line4, line5, line6, line7, line8, line9),
--- 	{}
--- )

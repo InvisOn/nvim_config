@@ -31,9 +31,9 @@ vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#CCCCCC" })
 
 vim.cmd([[filetype on]])
 vim.filetype.add({
-	extension = {
-		typ = "typst",
-	},
+  extension = {
+    typ = "typst",
+  },
 })
 
 -- vim.diagnostic.config({

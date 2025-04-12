@@ -154,8 +154,14 @@ vim.keymap.set("n", "<leader>gm", ":Git mergetool<CR>")
 vim.opt.diffopt:append("algorithm:patience")
 vim.opt.diffopt:append("indent-heuristic")
 
+-- https://github.com/folke/todo-comments.nvim
 vim.keymap.set("n", "<Leader>t", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
+
 vim.api.nvim_set_keymap("i", "<C-t>", " TODO: ", { noremap = true, silent = true, desc = "Insert todo comment" })
 vim.api.nvim_set_keymap("n", "<C-t>", "A TODO: ", { noremap = true, silent = true, desc = "Insert todo" })
-vim.api.nvim_set_keymap("i", "<C-r>", " NEXT_ACTION: ", { noremap = true, silent = true, desc = "Insert next action" })
-vim.api.nvim_set_keymap("n", "<C-r>", "A NEXT_ACTION: ", { noremap = true, silent = true, desc = "Insert next action" })
+
+vim.api.nvim_set_keymap("i", "<C-ff>", " NEXT_ACTION: ", { noremap = true, silent = true, desc = "Insert next action" })
+vim.api.nvim_set_keymap("n", "<C-f>", "A NEXT_ACTION: ", { noremap = true, silent = true, desc = "Insert next action" })
+
+vim.api.nvim_set_keymap("i", "<C-l>", " LEARN: ", { noremap = true, silent = true, desc = "Insert learn" })
+vim.api.nvim_set_keymap("n", "<C-l>", "A LEARN: ", { noremap = true, silent = true, desc = "Insert learn" })

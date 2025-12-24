@@ -20,6 +20,13 @@ return {
 						-- returns a table (see below)
 						command = { "fish" },
 					},
+					haskell = {
+						command = function(meta)
+							local file = vim.api.nvim_buf_get_name(meta.current_bufnr)
+							-- call `require` in case iron is set up before haskell-tools
+							return require("haskell-tools").repl.mk_repl_cmd(file)
+						end,
+					},
 				},
 				-- How the repl window will be displayed
 				-- See below for more information

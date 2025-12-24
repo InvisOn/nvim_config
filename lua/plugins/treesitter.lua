@@ -14,20 +14,11 @@ return {
           "bash",
           "tsx",
           "c",
-          "css",
-          "dot",
           "html",
           "javascript",
-          "julia",
-          -- "latex", -- requires tree-sitter-cli (installed automatically via Mason)
           "lua",
           "markdown",
           "markdown_inline",
-          "nim",
-          "python",
-          "query",
-          "rust",
-          "sql",
           "typescript",
           "vim",
           "vimdoc",
@@ -54,7 +45,7 @@ return {
             enable = true,
             lookahead = true,
             keymaps = {
-              -- You can use the capture groups defined in textobjects.scm
+              -- you can use the capture groups defined in textobjects.scm
               ["af"] = "@function.outer",
               ["if"] = "@function.inner",
               ["ac"] = "@class.outer",
@@ -69,7 +60,7 @@ return {
               ["]]"] = "@class.inner",
             },
             goto_next_end = {
-              ["]M"] = "@function.outer",
+              ["]m"] = "@function.outer",
               ["]["] = "@class.outer",
             },
             goto_previous_start = {
@@ -77,7 +68,7 @@ return {
               ["[["] = "@class.inner",
             },
             goto_previous_end = {
-              ["[M"] = "@function.outer",
+              ["[m"] = "@function.outer",
               ["[]"] = "@class.outer",
             },
           },

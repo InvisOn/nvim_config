@@ -1,0 +1,10 @@
+return {
+  "CRAG666/code_runner.nvim",
+  config = function()
+    code_runner = require('code_runner')
+    code_runner.setup()
+    require('code_runner').setup()
+    vim.keymap.set('n', '<leader>rr', code_runner.run_code, { noremap = true, silent = false, desc = 'run code' })
+    -- vim.keymap.set('n', '<leader>rf', ':RunFile<CR>', { noremap = true, silent = false })
+  end
+}

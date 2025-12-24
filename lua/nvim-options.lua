@@ -6,8 +6,6 @@ vim.opt.showtabline = 0
 vim.opt.autowrite = true
 -- vim.opt.max_line_length = 120
 
-vim.opt.spelllang = "en_nz"
-
 vim.cmd("set number")
 vim.opt.relativenumber = true
 vim.cmd("highlight LineNr guifg=DarkGrey")
@@ -17,7 +15,7 @@ vim.cmd("hi ColorColumn guibg=#272a3f")
 
 vim.api.nvim_create_augroup("AutoFormat", {})
 vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = { "*.py", "*.rs", "*.lua", "*.typ" },
+  pattern = { "*.py", "*.rs", "*.lua", "*.typ", "*.ml", "*.hs" },
   group = "AutoFormat",
   callback = function()
     vim.cmd("lua vim.lsp.buf.format()")
@@ -29,6 +27,11 @@ vim.cmd([[augroup HelpLineNumber
   autocmd FileType help setlocal relativenumber
   autocmd FileType man setlocal relativenumber
 augroup END]])
+
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  command = "setlocal nospell",
+})
 
 vim.opt.swapfile = true
 
@@ -44,7 +47,5 @@ vim.filetype.add({
   },
 })
 
--- vim.diagnostic.config({
--- 	virtual_text = false,
--- })
 vim.opt.fillchars.eob = ""
+vim.opt.shell = "bash"

@@ -4,3 +4,4 @@ vim.opt.shiftwidth = 2
 -- vim.opt.expandtab = true
 
 vim.opt.spell = true
+vim.opt.spelllang = "en_nz"

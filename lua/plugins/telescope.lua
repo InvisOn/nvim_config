@@ -8,15 +8,21 @@ return {
 		config = function()
 			local builtin = require("telescope.builtin")
 
-			-- vim.keymap.set("n", "<Leader>ff", builtin.find_files, { desc = "Telescope find files" })
-			vim.keymap.set(
-				"n",
-				"<Leader>ff",
-				':lua require"telescope.builtin".find_files({ hidden = true })<CR>',
-				{ desc = "Telescope find files" }
-			)
+			vim.keymap.set("n", "<Leader>ff", function()
+				builtin.find_files({ hidden = true })
+			end, { desc = "Telescope live grep" })
+
+			vim.keymap.set("n", "<Leader>fw", function()
+				builtin.find_files({ hidden = true, default_text = vim.fn.expand("<cword>") })
+			end, { desc = "Telescope live grep" })
 
 			vim.keymap.set("n", "<Leader>gg", builtin.live_grep, { desc = "Telescope live grep" })
+
+			vim.keymap.set("n", "<leader>gw", function()
+				builtin.live_grep({
+					default_text = vim.fn.expand("<cword>"),
+				})
+			end, { desc = "Find word under cursor with live grep" })
 
 			vim.keymap.set("n", "<Leader><Tab>", function()
 				builtin.buffers({ show_all_buffers = false, sort_mru = true })
@@ -28,7 +34,9 @@ return {
 
 			vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Help tags" })
 
-			vim.keymap.set("n", "gr", builtin.lsp_references, { desc = "Go to references" })
+			vim.keymap.set("n", "<leader>gr", builtin.lsp_references, { desc = "Go to references" })
+
+			vim.keymap.set("n", "<leader>tr", builtin.resume, { desc = "Resume last telescope session" })
 
 			local telescope = require("telescope")
 

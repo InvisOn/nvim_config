@@ -14,12 +14,13 @@ vim.cmd(":set colorcolumn=120")
 vim.cmd("hi ColorColumn guibg=#272a3f")
 
 vim.api.nvim_create_augroup("AutoFormat", {})
+
 vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = { "*.py", "*.rs", "*.lua", "*.typ", "*.ml", "*.hs" },
-  group = "AutoFormat",
-  callback = function()
-    vim.cmd("lua vim.lsp.buf.format()")
-  end,
+	pattern = { "*.py", "*.rs", "*.lua", "*.typ", "*.ml", "*.hs" },
+	group = "AutoFormat",
+	callback = function()
+		vim.lsp.buf.format()
+	end,
 })
 
 vim.cmd([[augroup HelpLineNumber
@@ -29,8 +30,8 @@ vim.cmd([[augroup HelpLineNumber
 augroup END]])
 
 vim.api.nvim_create_autocmd("TermOpen", {
-  pattern = "*",
-  command = "setlocal nospell",
+	pattern = "*",
+	command = "setlocal nospell",
 })
 
 vim.opt.swapfile = true
@@ -42,10 +43,14 @@ vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#CCCCCC" })
 vim.cmd([[filetype on]])
 
 vim.filetype.add({
-  extension = {
-    typ = "typst",
-  },
+	extension = {
+		typ = "typst",
+	},
 })
 
 vim.opt.fillchars.eob = ""
 vim.opt.shell = "bash"
+
+-- To prevert syntax highlighting from flickering when multiple panes with the same file are open
+-- https://github.com/neovim/neovim/issues/32660
+vim.g._ts_force_sync_parsing = true

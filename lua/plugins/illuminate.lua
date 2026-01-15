@@ -1,5 +1,5 @@
 return {
-	"RRethy/vim-illuminate", -- Highlight other uses of the word under the cursor
+	"rrethy/vim-illuminate", -- highlight other uses of the word under the cursor
 	lazy = false,
 	config = function()
 		-- default configuration

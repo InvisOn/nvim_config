@@ -25,7 +25,7 @@ return {
 			end, { desc = "Find word under cursor with live grep" })
 
 			vim.keymap.set("n", "<Leader><Tab>", function()
-				builtin.buffers({ show_all_buffers = false, sort_mru = true })
+				builtin.buffers()
 			end, { desc = "Telescope buffers" })
 
 			vim.keymap.set("n", "<Leader>mm", builtin.keymaps, { desc = "Telescope keymaps" })
@@ -41,6 +41,19 @@ return {
 			local telescope = require("telescope")
 
 			telescope.setup({
+				pickers = {
+					buffers = {
+						show_all_buffers = false,
+						sort_lastused = true,
+						-- theme = "dropdown",
+						-- previewer = false,
+						mappings = {
+							i = {
+								["<c-d>"] = "delete_buffer",
+							},
+						},
+					},
+				},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown({}),

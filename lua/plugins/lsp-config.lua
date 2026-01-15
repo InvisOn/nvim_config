@@ -55,7 +55,7 @@ return {
 				dynamicRegistration = false,
 			}
 
-			local lspconfig = require("lspconfig")
+			-- local lspconfig = require("lspconfig")
 			-- local lspconfig = vim.lsp.config()
 			local lsp_flags = {
 				allow_incremental_sync = true,

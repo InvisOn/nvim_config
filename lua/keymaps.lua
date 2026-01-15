@@ -156,7 +156,7 @@ vim.opt.diffopt:append("algorithm:patience")
 vim.opt.diffopt:append("indent-heuristic")
 
 -- https://github.com/folke/todo-comments.nvim
-vim.keymap.set("n", "<Leader>t", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
+vim.keymap.set("n", "<Leader>td", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
 
 vim.api.nvim_set_keymap("i", "<C-t>", " TODO: ", { noremap = true, silent = true, desc = "Insert todo comment" })
 vim.api.nvim_set_keymap("n", "<C-t>", "A TODO: ", { noremap = true, silent = true, desc = "Insert todo" })

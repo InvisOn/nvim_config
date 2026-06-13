@@ -8,15 +8,23 @@ return {
 			-- Install parsers up front
 			require("nvim-treesitter").install({
 				"bash",
-				"tsx",
 				"c",
+				"c++",
+				"haskell",
 				"html",
+				"lean",
 				"lua",
 				"markdown",
 				"markdown_inline",
+				"nu",
+				"ocaml",
+				"python",
+				"rust",
+				"tsx",
 				"vim",
 				"vimdoc",
 				"yaml",
+				"zig",
 			})
 
 			-- Enable highlighting + treesitter indent per filetype

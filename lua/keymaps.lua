@@ -195,3 +195,8 @@ vim.api.nvim_set_keymap("n", "<C-f>", "A NEXT_ACTION: ", { noremap = true, silen
 
 vim.api.nvim_set_keymap("i", "<C-l>", " LEARN: ", { noremap = true, silent = true, desc = "Insert learn" })
 vim.api.nvim_set_keymap("n", "<C-l>", "A LEARN: ", { noremap = true, silent = true, desc = "Insert learn" })
+
+vim.keymap.set("n", "<leader>ll", function()
+	local current = vim.diagnostic.config().virtual_lines
+	vim.diagnostic.config({ virtual_lines = not current })
+end, { desc = "Toggle diagnostic virtual lines" })

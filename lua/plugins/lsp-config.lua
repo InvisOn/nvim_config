@@ -22,9 +22,9 @@ return {
 				"stylua",
 				"tree-sitter-cli",
 				-- LSP Servers
-				"julia-lsp",
+				-- "julia-lsp",
 				"tinymist",
-				"typescript-language-server",
+				-- "typescript-language-server",
 			},
 		},
 	},

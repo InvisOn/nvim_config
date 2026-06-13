@@ -91,8 +91,21 @@ return {
 					end,
 				},
 				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
+					completion = cmp.config.window.bordered({
+						border = "rounded",
+						max_width = 60,
+					}),
+					documentation = cmp.config.window.bordered({
+						border = "rounded",
+						max_width = 60,
+						max_height = 15,
+					}),
+				},
+				formatting = {
+					format = require("lspkind").cmp_format({
+						maxwidth = 50,
+						ellipsis_char = "...",
+					}),
 				},
 				mapping = cmp.mapping.preset.insert({
 					["<C-b>"] = cmp.mapping.scroll_docs(-4),

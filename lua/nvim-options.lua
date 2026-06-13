@@ -4,6 +4,7 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.showtabline = 0
 vim.opt.autowrite = true
+vim.opt.smarttab = false
 -- vim.opt.max_line_length = 120
 
 vim.cmd("set number")
@@ -13,11 +14,19 @@ vim.cmd("highlight LineNr guifg=DarkGrey")
 vim.cmd(":set colorcolumn=120")
 vim.cmd("hi ColorColumn guibg=#272a3f")
 
-vim.api.nvim_create_augroup("AutoFormat", {})
+vim.api.nvim_create_autocmd("ExitPre", {
+	pattern = "*",
+	callback = function(event)
+		for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+			if vim.api.nvim_buf_get_option(buf, "buftype") == "terminal" then
+				vim.api.nvim_buf_delete(buf, { force = true })
+			end
+		end
+	end,
+})
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = { "*.py", "*.rs", "*.lua", "*.typ", "*.ml", "*.hs" },
-	group = "AutoFormat",
 	callback = function()
 		vim.lsp.buf.format()
 	end,
@@ -54,3 +63,11 @@ vim.opt.shell = "bash"
 -- To prevert syntax highlighting from flickering when multiple panes with the same file are open
 -- https://github.com/neovim/neovim/issues/32660
 vim.g._ts_force_sync_parsing = true
+
+vim.diagnostic.config({
+	float = {
+		border = "rounded",
+	},
+})
+
+vim.o.winborder = "rounded"

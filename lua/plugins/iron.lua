@@ -2,7 +2,38 @@ return {
 	"Vigemus/iron.nvim",
 	lazy = false,
 	config = function()
+		local function smart_haskell_format(lines)
+			-- Don't wrap single lines
+			if #lines == 1 then
+				return lines[1] .. "\n"
+			end
+
+			-- Don't wrap if already wrapped
+			local first_line = vim.trim(lines[1])
+			local last_line = vim.trim(lines[#lines])
+			if first_line == ":{" and last_line == ":}" then
+				return table.concat(lines, "\n")
+			end
+
+			-- Don't wrap simple expressions (heuristic)
+			local text = table.concat(lines, " ")
+			if text:match("^%s*[%w_]+%s*=%s*") and not text:match("where") and not text:match("let") then
+				-- Simple assignment, might not need wrapping
+				return table.concat(lines, "\n")
+			end
+
+			-- Wrap multiline function definitions, let blocks, etc.
+			local result = { ":{" }
+			for _, line in ipairs(lines) do
+				table.insert(result, line)
+			end
+			table.insert(result, ":}\n")
+
+			return table.concat(result, "\n")
+		end
+
 		local iron = require("iron.core")
+		local view = require("iron.view")
 
 		iron.setup({
 			config = {
@@ -26,12 +57,12 @@ return {
 							-- call `require` in case iron is set up before haskell-tools
 							return require("haskell-tools").repl.mk_repl_cmd(file)
 						end,
+						format = smart_haskell_format,
 					},
 				},
 				-- How the repl window will be displayed
 				-- See below for more information
-				-- repl_open_cmd = require("iron.view").bottom(0.30),
-				repl_open_cmd = "belowright 20 split",
+				repl_open_cmd = "belowright 15 split",
 			},
 			-- Iron doesn't set keymaps by default anymore.
 			-- You can set them here or manually add keymaps to the functions in iron.core
@@ -53,9 +84,9 @@ return {
 			-- If the highlight is on, you can change how it looks
 			-- For the available options, check nvim_set_hl
 			-- highlight = false,
-			-- highlight = {
-			-- 	italic = true,
-			-- },
+			highlight = {
+				italic = true,
+			},
 			ignore_blank_lines = false, -- ignore blank lines when sending visual select lines
 		})
 

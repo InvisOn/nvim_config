@@ -29,7 +29,7 @@ return {
 		},
 	},
 
-	{
+	{ -- https://www.andersevenrud.net/neovim.github.io/lsp/
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"mason-org/mason.nvim",
@@ -38,11 +38,6 @@ return {
 		},
 		config = function()
 			-- Configure hover handler for better markdown rendering
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-				border = "rounded",
-				stylize_markdown = true,
-			})
-
 			-- Setup capabilities with cmp support
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
@@ -54,6 +49,12 @@ return {
 			capabilities.workspace.didChangeWatchedFiles = {
 				dynamicRegistration = false,
 			}
+
+			require("lspconfig").lean.setup({
+				flags = {
+					debounce_text_changes = 500, -- ms, default is usually 150
+				},
+			})
 
 			-- local lspconfig = require("lspconfig")
 			-- local lspconfig = vim.lsp.config()
@@ -83,9 +84,13 @@ return {
 					python = {
 						typeCheckingMode = "strict",
 						diagnosticMode = "workspace",
+						useLibraryCodeForTypes = true,
+						autoImportCompletions = true,
+						autoSearchPaths = true,
 					},
 					pyright = {
-						disableLanguageServices = true,
+						disableLanguageServices = false,
+						disableOrganizeImports = true,
 					},
 				},
 			}

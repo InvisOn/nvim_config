@@ -8,7 +8,7 @@ return {
 			open_mapping = [[<c-\>]],
 			direction = "float",
 		})
-		vim.keymap.set("n", "<leader>or", function()
+		vim.keymap.set("n", "<leader>xr", function()
 			vim.cmd("w")
 			vim.cmd('TermExec cmd="cargo run"')
 		end, { desc = "Execute cargo run in terminal" })
@@ -16,7 +16,7 @@ return {
 		-- 	vim.cmd("w")
 		-- 	vim.cmd('TermExec cmd="cargo test"')
 		-- end, { desc = "Cargo test" })
-		vim.keymap.set("n", "<leader>ot", function()
+		vim.keymap.set("n", "<leader>xt", function()
 			vim.cmd("w")
 			vim.cmd('TermExec cmd="cargo test"')
 		end, { desc = "Execute cargo test command in terminal" })

@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 vim.api.nvim_set_keymap("t", "<ESC>", "<C-\\><C-n>", { noremap = true, desc = "Go to normal mode from terminal mode" })
 vim.api.nvim_set_keymap("n", "<leader>O", "z=", { noremap = true, desc = "Fix typo (extended)" })
@@ -8,12 +9,12 @@ vim.api.nvim_set_keymap("n", "<leader>o", "1z=", { noremap = true, desc = "Fix t
 vim.keymap.set("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 vim.keymap.set("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 
-vim.keymap.set("n", "<leader>qt", ":bd<CR>", { desc = "Close current active buffer" })
+vim.keymap.set("n", "<leader>qt", ":Bdelete<CR>", { desc = "Close current active buffer" })
 vim.keymap.set("n", "<leader>qi", ":%bd|e#<CR>", { desc = "Close current inactive buffers" })
 vim.keymap.set("n", "<leader>qa", ":%bd<CR>", { desc = "Close all buffers" })
 vim.keymap.set("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" })
 
-vim.keymap.set("n", "<leader>e", ":make<CR>", { desc = "Make run" })
+vim.keymap.set("n", "<leader>e", ":w<CR>:TermExec cmd='make'<CR>", { desc = "Make run" })
 
 vim.keymap.set(
 	"n",
@@ -156,6 +157,34 @@ vim.opt.diffopt:append("algorithm:patience")
 vim.opt.diffopt:append("indent-heuristic")
 
 -- https://github.com/folke/todo-comments.nvim
+vim.keymap.set("n", "<leader>j", ":w<CR>:TermExec cmd='zig run %'<CR>", { desc = "Run current Zig file" })
+vim.keymap.set("n", "<leader>n", function()
+	local current = vim.fn.expand("%:t")
+	local num = current:match("^(%d+)_")
+	if num then
+		local next_num = tonumber(num) + 1
+		local pattern = string.format("%03d_*", next_num)
+		local files = vim.fn.glob(pattern, false, true)
+		if #files > 0 then
+			vim.cmd("edit " .. files[1])
+		else
+			print("No next file found")
+		end
+	end
+end, { desc = "Open next numbered file" })
+vim.keymap.set("n", "<leader>,", function()
+	local current = vim.fn.expand("%:t")
+	local num = current:match("^(%d+)_")
+	if num then
+		local prev_num = tonumber(num) - 1
+		local pattern = string.format("%03d_*", prev_num)
+		local files = vim.fn.glob(pattern, false, true)
+		if #files > 0 then
+			vim.cmd("edit " .. files[1])
+		end
+	end
+end, { desc = "Open previous numbered file" })
+
 vim.keymap.set("n", "<Leader>td", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
 
 vim.api.nvim_set_keymap("i", "<C-t>", " TODO: ", { noremap = true, silent = true, desc = "Insert todo comment" })

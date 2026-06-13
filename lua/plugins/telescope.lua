@@ -43,6 +43,14 @@ return {
 			telescope.setup({
 				pickers = {
 					buffers = {
+						layout_config = {
+							horizontal = {
+								width = 0.7, -- Overall width
+								height = 0.8, -- Overall height
+								-- preview_width = 0.75, -- Preview pane width ratio
+								-- prompt_position = "top", -- Optional: move prompt to top
+							},
+						},
 						show_all_buffers = false,
 						sort_lastused = true,
 						mappings = {

@@ -156,34 +156,33 @@ end
 vim.opt.diffopt:append("algorithm:patience")
 vim.opt.diffopt:append("indent-heuristic")
 
--- https://github.com/folke/todo-comments.nvim
-vim.keymap.set("n", "<leader>j", ":w<CR>:TermExec cmd='zig run %'<CR>", { desc = "Run current Zig file" })
-vim.keymap.set("n", "<leader>n", function()
-	local current = vim.fn.expand("%:t")
-	local num = current:match("^(%d+)_")
-	if num then
-		local next_num = tonumber(num) + 1
-		local pattern = string.format("%03d_*", next_num)
-		local files = vim.fn.glob(pattern, false, true)
-		if #files > 0 then
-			vim.cmd("edit " .. files[1])
-		else
-			print("No next file found")
-		end
-	end
-end, { desc = "Open next numbered file" })
-vim.keymap.set("n", "<leader>,", function()
-	local current = vim.fn.expand("%:t")
-	local num = current:match("^(%d+)_")
-	if num then
-		local prev_num = tonumber(num) - 1
-		local pattern = string.format("%03d_*", prev_num)
-		local files = vim.fn.glob(pattern, false, true)
-		if #files > 0 then
-			vim.cmd("edit " .. files[1])
-		end
-	end
-end, { desc = "Open previous numbered file" })
+-- vim.keymap.set("n", "<leader>j", ":w<CR>:TermExec cmd='zig run %'<CR>", { desc = "Run current Zig file" })
+-- vim.keymap.set("n", "<leader>n", function()
+-- 	local current = vim.fn.expand("%:t")
+-- 	local num = current:match("^(%d+)_")
+-- 	if num then
+-- 		local next_num = tonumber(num) + 1
+-- 		local pattern = string.format("%03d_*", next_num)
+-- 		local files = vim.fn.glob(pattern, false, true)
+-- 		if #files > 0 then
+-- 			vim.cmd("edit " .. files[1])
+-- 		else
+-- 			print("No next file found")
+-- 		end
+-- 	end
+-- end, { desc = "Open next numbered file" })
+-- vim.keymap.set("n", "<leader>,", function()
+-- 	local current = vim.fn.expand("%:t")
+-- 	local num = current:match("^(%d+)_")
+-- 	if num then
+-- 		local prev_num = tonumber(num) - 1
+-- 		local pattern = string.format("%03d_*", prev_num)
+-- 		local files = vim.fn.glob(pattern, false, true)
+-- 		if #files > 0 then
+-- 			vim.cmd("edit " .. files[1])
+-- 		end
+-- 	end
+-- end, { desc = "Open previous numbered file" })
 
 vim.keymap.set("n", "<Leader>td", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
 

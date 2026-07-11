@@ -13,7 +13,7 @@ return {
 			end, { desc = "Telescope live grep" })
 
 			vim.keymap.set("n", "<Leader>fw", function()
-				builtin.find_files({ hidden = true, default_text = vim.fn.expand("<cword>") })
+				builtin.find_files({ hidden = false, default_text = vim.fn.expand("<cword>") })
 			end, { desc = "Telescope live grep" })
 
 			vim.keymap.set("n", "<Leader>gg", builtin.live_grep, { desc = "Telescope live grep" })

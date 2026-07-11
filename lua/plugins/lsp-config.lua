@@ -18,18 +18,14 @@ return {
 		dependencies = { "mason-org/mason.nvim" },
 		opts = {
 			ensure_installed = {
-				-- Formatters & Tools
 				"stylua",
 				"tree-sitter-cli",
-				-- LSP Servers
-				-- "julia-lsp",
 				"tinymist",
-				-- "typescript-language-server",
 			},
 		},
 	},
 
-	{ -- https://www.andersevenrud.net/neovim.github.io/lsp/
+	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"mason-org/mason.nvim",
@@ -37,38 +33,32 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
-			-- Configure hover handler for better markdown rendering
-			-- Setup capabilities with cmp support
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 			capabilities.textDocument.completion.completionItem.snippetSupport = true
 			capabilities.general.positionEncodings = { "utf-8", "utf-16" }
-
-			-- Disable file watchers to prevent lag (especially for Python projects)
 			capabilities.workspace = capabilities.workspace or {}
-			capabilities.workspace.didChangeWatchedFiles = {
-				dynamicRegistration = false,
-			}
+			capabilities.workspace.didChangeWatchedFiles = { dynamicRegistration = false }
 
-			require("lspconfig").lean.setup({
-				flags = {
-					debounce_text_changes = 500, -- ms, default is usually 150
-				},
-			})
-
-			-- local lspconfig = require("lspconfig")
-			-- local lspconfig = vim.lsp.config()
 			local lsp_flags = {
 				allow_incremental_sync = true,
 				debounce_text_changes = 150,
 			}
 
-			-- C/C++
-			vim.lsp.config.clangd = {
-				capabilities = capabilities,
-				flags = lsp_flags,
-				cmd = { "clangd", "--offset-encoding=utf-16" },
-			}
+			-- -- Lean 4 (leanls = "lean --server")
+			-- vim.lsp.config.leanls = {
+			-- 	capabilities = capabilities,
+			-- 	flags = { debounce_text_changes = 500 },
+			-- 	cmd = { "lean", "--server" },
+			-- 	filetypes = { "lean" },
+			-- }
+			--
+			-- -- C/C++
+			-- vim.lsp.config.clangd = {
+			-- 	capabilities = capabilities,
+			-- 	flags = lsp_flags,
+			-- 	cmd = { "clangd", "--offset-encoding=utf-16" },
+			-- }
 
 			-- Julia
 			vim.lsp.config.julials = {
@@ -106,9 +96,7 @@ return {
 				on_attach = function()
 					vim.lsp.buf_request_sync(0, "workspace/executeCommand", {
 						command = "typst-lsp.doPinMain",
-						arguments = {
-							vim.uri_from_fname(vim.fn.getcwd() .. "/main.typ"),
-						},
+						arguments = { vim.uri_from_fname(vim.fn.getcwd() .. "/main.typ") },
 					}, 1000)
 				end,
 			}
@@ -120,6 +108,9 @@ return {
 				filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "js", "ojs" },
 			}
 
+			-- Enable all configured servers
+			vim.lsp.enable({ "leanls", "clangd", "julials", "pyright", "tinymist", "ts_ls" })
+
 			-- Global diagnostic keymaps
 			vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
 			vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
@@ -130,12 +121,9 @@ return {
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 				callback = function(ev)
-					-- Enable completion triggered by <c-x><c-o>
 					vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-
 					local opts = { buffer = ev.buf }
 
-					-- Navigation
 					vim.keymap.set(
 						"n",
 						"gD",
@@ -154,8 +142,6 @@ return {
 						vim.lsp.buf.type_definition,
 						vim.tbl_extend("force", opts, { desc = "LSP go to type definition" })
 					)
-
-					-- Information
 					vim.keymap.set(
 						"n",
 						"K",
@@ -168,8 +154,6 @@ return {
 						vim.lsp.buf.hover,
 						vim.tbl_extend("force", opts, { desc = "LSP show hover" })
 					)
-
-					-- Actions
 					vim.keymap.set(
 						{ "n", "v" },
 						"<leader>lca",

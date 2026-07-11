@@ -9,10 +9,10 @@ return {
 			require("nvim-treesitter").install({
 				"bash",
 				"c",
-				"c++",
+				-- "c++",
 				"haskell",
 				"html",
-				"lean",
+				-- "lean",
 				"lua",
 				"markdown",
 				"markdown_inline",

@@ -1,4 +1,4 @@
-return {
+return { -- add the indent lines
 	"lukas-reineke/indent-blankline.nvim",
 	lazy = false,
 	main = "ibl",

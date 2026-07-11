@@ -10,16 +10,13 @@ return {
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		lazy = false,
+		keys = {
+			{ "<leader>ft", "<cmd>TodoTelescope<cr>", desc = "Find all TODOs" },
+		},
 		opts = {
 			signs = false,
 			keywords = {
-				LEARN = {
-					color = "#e0f017",
-				},
-				NEXT_ACTION = {
-					color = "#c84cf3",
-					alt = { "NA" },
-				},
+				AJ_TODO = { icon = " ", color = "info" },
 			},
 		},
 	},

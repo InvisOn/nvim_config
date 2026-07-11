@@ -5,30 +5,6 @@ return {
     config = true,
   },
 
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   cmd = "Copilot",
-  --   event = "InsertEnter",
-  --   lazy = false,
-  --   config = function()
-  --     require("copilot").setup({
-  --       suggestion = { enabled = false, auto_trigger = true },
-  --       panel = { enabled = false, auto_refresh = true },
-  --       filetypes = {
-  --         c = false,
-  --       },
-  --     })
-  --   end,
-  -- },
-  --
-  -- {
-  --   "zbirenbaum/copilot-cmp",
-  --   lazy = false,
-  --   config = function()
-  --     require("copilot_cmp").setup()
-  --   end,
-  -- },
-
   {
     "L3MON4D3/LuaSnip",
     lazy = false,
@@ -52,18 +28,21 @@ return {
       "L3MON4D3/LuaSnip",
       "f3fora/cmp-spell",
       "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-calc",
-      "hrsh7th/cmp-emoji",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-path",
-      "jmbuhr/cmp-pandoc-references",
-      "jmbuhr/otter.nvim",
       "onsails/lspkind-nvim",
       "rafamadriz/friendly-snippets",
       "ray-x/cmp-treesitter",
       "saadparwaiz1/cmp_luasnip",
     },
+    opts = function(_, opts)
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      })
+    end,
     config = function()
       local has_words_before = function()
         unpack = unpack or table.unpack
@@ -77,28 +56,23 @@ return {
 
       cmp.setup({
         snippet = {
-          -- REQUIRED - you must specify a snippet engine
           expand = function(args)
-            -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-            require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
-            -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-            -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+            require("luasnip").lsp_expand(args.body)
           end,
         },
         window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
+          completion = cmp.config.window.bordered({ border = "rounded" }),
+          documentation = cmp.config.window.bordered({ border = "rounded" }),
         },
         mapping = cmp.mapping.preset.insert({
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+          ["<CR>"] = cmp.mapping.confirm({ select = false }),
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
-              cmp.select_next_item() -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-              -- that way you will only jump inside the snippet region
+              cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
               luasnip.expand_or_jump()
             elseif has_words_before() then
@@ -118,18 +92,14 @@ return {
             end
           end, { "i", "s" }),
         }),
+
         sources = cmp.config.sources({
           { name = "buffer" },
-          { name = "calc" },
           { name = "luasnip" },
           { name = "nvim_lsp" },
           { name = "nvim_lsp_signature_help" },
           { name = "treesitter" },
-          { name = "otter" },
-          { name = "pandoc_references" },
           { name = "path" },
-          { name = "spell" },
-          -- { name = "copilot" },
         }),
       })
 

@@ -9,7 +9,7 @@ return {
 			local builtin = require("telescope.builtin")
 
 			vim.keymap.set("n", "<Leader>ff", function()
-				builtin.find_files({ hidden = true })
+				builtin.find_files({ hidden = false })
 			end, { desc = "Telescope live grep" })
 
 			vim.keymap.set("n", "<Leader>fw", function()
@@ -37,6 +37,13 @@ return {
 			vim.keymap.set("n", "<leader>gr", builtin.lsp_references, { desc = "Go to references" })
 
 			vim.keymap.set("n", "<leader>tr", builtin.resume, { desc = "Resume last telescope session" })
+
+			vim.keymap.set("n", "<leader>dd", function()
+				builtin.diagnostics({
+					layout_strategy = "vertical",
+					layout_config = { preview_cutoff = 0, preview_height = 0.7 },
+				})
+			end, { desc = "Telescope diagnostics" })
 
 			local telescope = require("telescope")
 
@@ -69,6 +76,54 @@ return {
 					file_ignore_patterns = {
 						"node_modules",
 						".git/",
+					},
+				},
+			})
+
+			local telescope = require("telescope")
+
+			local wipeout_buf = function(prompt_bufnr)
+				local action_state = require("telescope.actions.state")
+				local current_picker = action_state.get_current_picker(prompt_bufnr)
+
+				current_picker:delete_selection(function(selection)
+					local wins = vim.tbl_filter(function(win)
+						return vim.api.nvim_win_get_buf(win) == selection.bufnr
+					end, vim.api.nvim_list_wins())
+
+					for _, win in ipairs(wins) do
+						-- use enew regardless, safest option
+						vim.api.nvim_win_call(win, function()
+							vim.cmd("enew")
+						end)
+					end
+
+					local ok, err = pcall(vim.api.nvim_buf_delete, selection.bufnr, { force = true })
+					if not ok then
+						vim.notify("failed: " .. tostring(err), vim.log.levels.ERROR)
+					end
+					return ok
+				end)
+			end
+
+			telescope.setup({
+				extensions = {
+					["ui-select"] = {
+						require("telescope.themes").get_dropdown({}),
+					},
+				},
+				defaults = {
+					file_ignore_patterns = {
+						"node_modules",
+						".git/",
+					},
+				},
+				pickers = {
+					buffers = {
+						mappings = {
+							i = { ["<C-d>"] = wipeout_buf },
+							n = { ["<C-d>"] = wipeout_buf },
+						},
 					},
 				},
 			})

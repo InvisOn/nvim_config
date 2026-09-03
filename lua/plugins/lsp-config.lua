@@ -60,6 +60,13 @@ return {
 			-- 	cmd = { "clangd", "--offset-encoding=utf-16" },
 			-- }
 
+			-- Roc
+			vim.lsp.config.roc_ls = {
+				capabilities = capabilities,
+				flags = lsp_flags,
+				cmd = { "roc", "experimental-lsp" },
+				filetypes = { "roc" },
+			}
 			-- Julia
 			vim.lsp.config.julials = {
 				capabilities = capabilities,
@@ -109,7 +116,7 @@ return {
 			}
 
 			-- Enable all configured servers
-			vim.lsp.enable({ "leanls", "clangd", "julials", "pyright", "tinymist", "ts_ls" })
+			vim.lsp.enable({ "leanls", "clangd", "julials", "pyright", "tinymist", "ts_ls", "roc_ls" })
 
 			-- Global diagnostic keymaps
 			vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, { desc = "Open diagnostic float" })

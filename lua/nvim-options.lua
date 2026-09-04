@@ -75,3 +75,5 @@ vim.o.winborder = "rounded"
 vim.opt.ttimeoutlen = 0
 vim.o.exrc = true
 vim.lsp.enable("gleam")
+
+vim.filetype.add({ extension = { roc = "roc" } })

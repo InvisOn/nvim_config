@@ -72,6 +72,12 @@ return {
 				cmd = { "clangd", "--offset-encoding=utf-16" },
 			})
 
+			vim.lsp.config("nushell", {
+				cmd = { "nu", "--lsp" },
+				filetypes = { "nu" },
+				root_markers = { ".git" },
+			})
+			vim.lsp.enable("nushell")
 			-- If automatic_enable = false above, enable servers explicitly:
 			-- vim.lsp.enable({ "pylsp", "clangd", "lua_ls" })
 

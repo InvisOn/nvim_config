@@ -12,7 +12,7 @@ return {
 			vim.keymap.set(
 				"n",
 				"<Leader>ff",
-				':lua require"telescope.builtin".find_files({ hidden = true })<CR>',
+				':lua require"telescope.builtin".find_files({ hidden = false })<CR>',
 				{ desc = "Telescope find files" }
 			)
 
@@ -39,6 +39,8 @@ return {
 			vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Help tags" })
 
 			vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Git status" })
+
+			vim.keymap.set("n", "<leader>gO", builtin.lsp_document_symbols, { desc = "Git status" })
 
 			vim.keymap.set("n", "<leader>dd", function()
 				builtin.diagnostics({

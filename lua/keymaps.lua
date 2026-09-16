@@ -8,7 +8,7 @@ vim.api.nvim_set_keymap("n", "<leader>o", "1z=", { noremap = true, desc = "Fix t
 vim.keymap.set("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 vim.keymap.set("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 
-vim.keymap.set("n", "<leader>qt", ":bd<CR>", { desc = "Close current active buffer" })
+vim.keymap.set("n", "<leader>qt", ":bp | bd #<CR>", { desc = "Close current active buffer" })
 vim.keymap.set("n", "<leader>qi", ":%bd|e#<CR>", { desc = "Close current inactive buffers" })
 vim.keymap.set("n", "<leader>qa", ":%bd<CR>", { desc = "Close all buffers" })
 vim.keymap.set("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" })

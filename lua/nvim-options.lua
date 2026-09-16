@@ -40,3 +40,5 @@ vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#CCCCCC" })
 vim.cmd([[filetype on]])
 
 vim.opt.fillchars.eob = ""
+
+pcall(vim.keymap.del, "n", "gO")

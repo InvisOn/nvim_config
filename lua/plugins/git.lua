@@ -3,25 +3,47 @@ return {
 		"lewis6991/gitsigns.nvim",
 		lazy = false,
 		config = function()
-			local function pick_base()
-				for _, ref in ipairs({ "main", "master" }) do
-					if vim.fn.system({ "git", "rev-parse", "--verify", "--quiet", ref }) ~= "" then
-						return ref
-					end
-				end
-				return nil -- falls back to gitsigns default (index)
+			local gitsigns = require("gitsigns")
+			local sign_highlights = {
+				"GitSignsAdd",
+				"GitSignsChange",
+				"GitSignsDelete",
+				"GitSignsTopdelete",
+				"GitSignsChangedelete",
+			}
+			local default_sign_highlights = {}
+
+			gitsigns.setup()
+
+			for _, highlight in ipairs(sign_highlights) do
+				default_sign_highlights[highlight] = vim.api.nvim_get_hl(0, { name = highlight, link = false })
 			end
 
-			require("gitsigns").setup({ base = pick_base() })
-
-			local function set_colors()
-				for _, group in ipairs({ "GitSignsAdd", "GitSignsChange", "GitSignsDelete" }) do
-					vim.api.nvim_set_hl(0, group, { fg = "#8a4175" })
+			local function set_commit_sign_highlights()
+				for _, highlight in ipairs(sign_highlights) do
+					vim.api.nvim_set_hl(0, highlight, { fg = "#8a4175" })
 				end
 			end
 
-			set_colors()
-			vim.api.nvim_create_autocmd("ColorScheme", { callback = set_colors })
+			local function restore_default_sign_highlights()
+				for _, highlight in ipairs(sign_highlights) do
+					vim.api.nvim_set_hl(0, highlight, default_sign_highlights[highlight])
+				end
+			end
+
+			local commit_signs_enabled = false
+			vim.keymap.set("n", "<leader>gt", function()
+				commit_signs_enabled = not commit_signs_enabled
+				if commit_signs_enabled then
+					set_commit_sign_highlights()
+					gitsigns.change_base("main", true)
+					return
+				end
+
+				gitsigns.change_base(nil, true, restore_default_sign_highlights)
+			end, {
+				desc = "Toggle Git gutter signs against main",
+			})
 		end,
 	},
 	{

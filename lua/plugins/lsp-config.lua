@@ -67,6 +67,14 @@ return {
 				cmd = { "roc", "experimental-lsp" },
 				filetypes = { "roc" },
 			}
+
+			vim.lsp.config.nushell = {
+				capabilities = capabilities,
+				flags = lsp_flags,
+				cmd = { "nu", "--lsp" },
+				filetypes = { "nu" },
+			}
+
 			-- Julia
 			vim.lsp.config.julials = {
 				capabilities = capabilities,
@@ -116,7 +124,7 @@ return {
 			}
 
 			-- Enable all configured servers
-			vim.lsp.enable({ "leanls", "clangd", "julials", "pyright", "tinymist", "ts_ls", "roc_ls" })
+			vim.lsp.enable({ "leanls", "clangd", "julials", "pyright", "tinymist", "ts_ls", "roc_ls", "nushell" })
 
 			-- Global diagnostic keymaps
 			vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, { desc = "Open diagnostic float" })

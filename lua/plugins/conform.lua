@@ -1,11 +1,16 @@
 return {
 	"stevearc/conform.nvim",
-	opts = {},
 	config = function()
 		require("conform").setup({
-			formatters_by_ft = { lean = { "lean_fmt" } },
+			formatters_by_ft = {
+				roc = { "roc_fmt" },
+			},
 			formatters = {
-				lean_fmt = { command = "lean-fmt", stdin = true },
+				roc_fmt = { command = "roc", args = { "fmt", "--stdin" }, stdin = true },
+			},
+			format_on_save = {
+				timeout_ms = 2000,
+				lsp_format = "fallback",
 			},
 		})
 	end,

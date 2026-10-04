@@ -42,6 +42,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 set_diag_hl()
 
+vim.opt.shellslash = false
 vim.opt.shortmess:append({ I = true })
 require("keymaps") -- needs to be loaded before lazyplugins, otherwise lazyplugins keymaps won't work
 require("lazy").setup("plugins")

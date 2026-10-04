@@ -36,11 +36,11 @@ return {
 
 			vim.keymap.set("n", "<Leader>yy", builtin.registers, { desc = "Telescope yank history" })
 
-			vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Help tags" })
+			vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Telescope Help tags" })
 
-			vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Git status" })
+			vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Telescope Git status" })
 
-			vim.keymap.set("n", "<leader>gO", builtin.lsp_document_symbols, { desc = "Git status" })
+			vim.keymap.set("n", "<leader>gO", builtin.lsp_document_symbols, { desc = "Telescope lsp_document_symbols" })
 
 			vim.keymap.set("n", "<leader>dd", function()
 				builtin.diagnostics({
@@ -97,6 +97,9 @@ return {
 					},
 				},
 				defaults = {
+					path_display = function(opts, path)
+						return (path:gsub("/", "\\"))
+					end,
 					file_ignore_patterns = {
 						"node_modules",
 						".git/",

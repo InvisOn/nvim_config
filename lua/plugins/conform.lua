@@ -4,8 +4,10 @@ return {
 		require("conform").setup({
 			formatters_by_ft = {
 				roc = { "roc_fmt" },
+				nu = { "nufmt" },
 			},
 			formatters = {
+				nufmt = { command = "nufmt", args = { "--stdin" }, stdin = true },
 				roc_fmt = { command = "roc", args = { "fmt", "--stdin" }, stdin = true },
 			},
 			format_on_save = {

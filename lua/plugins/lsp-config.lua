@@ -73,6 +73,7 @@ return {
 				flags = lsp_flags,
 				cmd = { "nu", "--lsp" },
 				filetypes = { "nu" },
+				root_markers = { ".git" },
 			}
 
 			-- Julia

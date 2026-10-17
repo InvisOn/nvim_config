@@ -65,6 +65,7 @@ return {
 				capabilities = capabilities,
 				flags = lsp_flags,
 				cmd = { "roc", "experimental-lsp" },
+				init_options = { trustedWorkspace = true },
 				filetypes = { "roc" },
 			}
 

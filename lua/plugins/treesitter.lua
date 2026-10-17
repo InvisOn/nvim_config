@@ -9,23 +9,19 @@ return {
 			require("nvim-treesitter").install({
 				"bash",
 				"c",
-				-- "haskell",
 				"html",
 				"lua",
 				"markdown",
 				"markdown_inline",
 				"nu",
-				-- "ocaml",
 				"python",
 				"roc",
 				"rust",
-				-- "tsx",
 				"vim",
 				"vimdoc",
 				"yaml",
 				"zig",
 				-- "c++",
-				-- "lean",
 			})
 
 			local indent_supported = {

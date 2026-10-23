@@ -169,6 +169,26 @@ return {
 					},
 				}),
 			})
+
+			-- The buffer and treesitter sources scan the whole file on every
+			-- keystroke, which stalls insert mode in very large files.
+			vim.api.nvim_create_autocmd("BufReadPost", {
+				group = vim.api.nvim_create_augroup("CmpLargeFile", { clear = true }),
+				callback = function(args)
+					if vim.api.nvim_buf_line_count(args.buf) > 10000 then
+						vim.api.nvim_buf_call(args.buf, function()
+							cmp.setup.buffer({
+								sources = cmp.config.sources({
+									{ name = "luasnip" },
+									{ name = "nvim_lsp" },
+									{ name = "nvim_lsp_signature_help" },
+									{ name = "path" },
+								}),
+							})
+						end)
+					end
+				end,
+			})
 		end,
 	},
 }

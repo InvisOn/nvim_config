@@ -40,53 +40,27 @@ return {
 			capabilities.workspace = capabilities.workspace or {}
 			capabilities.workspace.didChangeWatchedFiles = { dynamicRegistration = false }
 
-			local lsp_flags = {
-				allow_incremental_sync = true,
-				debounce_text_changes = 150,
-			}
-
-			-- -- Lean 4 (leanls = "lean --server")
-			-- vim.lsp.config.leanls = {
-			-- 	capabilities = capabilities,
-			-- 	flags = { debounce_text_changes = 500 },
-			-- 	cmd = { "lean", "--server" },
-			-- 	filetypes = { "lean" },
-			-- }
-			--
-			-- -- C/C++
-			-- vim.lsp.config.clangd = {
-			-- 	capabilities = capabilities,
-			-- 	flags = lsp_flags,
-			-- 	cmd = { "clangd", "--offset-encoding=utf-16" },
-			-- }
+			-- shared by every server
+			vim.lsp.config("*", {
+				capabilities = capabilities,
+				flags = { allow_incremental_sync = true, debounce_text_changes = 150 },
+			})
 
 			-- Roc
 			vim.lsp.config.roc_ls = {
-				capabilities = capabilities,
-				flags = lsp_flags,
 				cmd = { "roc", "experimental-lsp" },
 				init_options = { trustedWorkspace = true },
 				filetypes = { "roc" },
 			}
 
 			vim.lsp.config.nushell = {
-				capabilities = capabilities,
-				flags = lsp_flags,
 				cmd = { "nu", "--lsp" },
 				filetypes = { "nu" },
 				root_markers = { ".git" },
 			}
 
-			-- Julia
-			vim.lsp.config.julials = {
-				capabilities = capabilities,
-				flags = lsp_flags,
-			}
-
 			-- Python
 			vim.lsp.config.pyright = {
-				capabilities = capabilities,
-				flags = lsp_flags,
 				settings = {
 					python = {
 						typeCheckingMode = "strict",
@@ -104,8 +78,6 @@ return {
 
 			-- Typst
 			vim.lsp.config.tinymist = {
-				capabilities = capabilities,
-				flags = lsp_flags,
 				settings = {
 					exportPdf = "never",
 					formatterMode = "typstyle",
@@ -124,13 +96,12 @@ return {
 
 			-- TypeScript/JavaScript
 			vim.lsp.config.ts_ls = {
-				capabilities = capabilities,
-				flags = lsp_flags,
 				filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "js", "ojs" },
 			}
 
 			-- Enable all configured servers
-			vim.lsp.enable({ "leanls", "clangd", "julials", "pyright", "tinymist", "ts_ls", "roc_ls", "nushell" })
+			-- (lean.nvim enables leanls itself)
+			vim.lsp.enable({ "clangd", "gleam", "julials", "pyright", "tinymist", "ts_ls", "roc_ls", "nushell" })
 
 			-- Global diagnostic keymaps
 			vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, { desc = "Open diagnostic float" })

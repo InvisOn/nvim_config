@@ -104,32 +104,6 @@ vim.keymap.set(
 	{ noremap = true, silent = true, desc = "Word count selection." }
 )
 
--- fugitive
-local function git_add_current()
-	vim.cmd("w")
-	vim.api.nvim_command("Git add %")
-	vim.api.nvim_command("Git commit")
-	vim.api.nvim_command("startinsert")
-end
-
-vim.g.gitblame_display_virtual_text = 0 -- to disable git blame initially
-
-local function toggle_git_blame_line()
-	if vim.g.gitblame_display_virtual_text == 0 then
-		vim.g.gitblame_display_virtual_text = 1
-	else
-		vim.g.gitblame_display_virtual_text = 0
-	end
-end
-
--- Fugative keysbind
--- Helpful keymaps for Git operations
--- vim.keymap.set("n", "<leader>gs", ":Git<CR>")
--- vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>")
--- vim.keymap.set("n", "<leader>gc", git_add_current, { desc = "Git add and commit current buffer" })
--- vim.keymap.set("n", "<leader>gb", toggle_git_blame_line)
--- vim.keymap.set("n", "<leader>gm", ":Git mergetool<CR>")
-
 -- Diff of the current file (staged + unstaged vs HEAD), rendered by delta.
 -- No pager: output lands in the terminal buffer so the cursor can be placed
 -- on the diff line matching the buffer's cursor line. q closes it, Enter
@@ -223,38 +197,6 @@ vim.keymap.set("n", "<leader>gd", function()
 		end,
 	})
 end, { desc = "Git diff current file (delta)" })
-
--- Improve diff experience
-vim.opt.diffopt:append("algorithm:patience")
-vim.opt.diffopt:append("indent-heuristic")
-
--- vim.keymap.set("n", "<leader>j", ":w<CR>:TermExec cmd='zig run %'<CR>", { desc = "Run current Zig file" })
--- vim.keymap.set("n", "<leader>n", function()
--- 	local current = vim.fn.expand("%:t")
--- 	local num = current:match("^(%d+)_")
--- 	if num then
--- 		local next_num = tonumber(num) + 1
--- 		local pattern = string.format("%03d_*", next_num)
--- 		local files = vim.fn.glob(pattern, false, true)
--- 		if #files > 0 then
--- 			vim.cmd("edit " .. files[1])
--- 		else
--- 			print("No next file found")
--- 		end
--- 	end
--- end, { desc = "Open next numbered file" })
--- vim.keymap.set("n", "<leader>,", function()
--- 	local current = vim.fn.expand("%:t")
--- 	local num = current:match("^(%d+)_")
--- 	if num then
--- 		local prev_num = tonumber(num) - 1
--- 		local pattern = string.format("%03d_*", prev_num)
--- 		local files = vim.fn.glob(pattern, false, true)
--- 		if #files > 0 then
--- 			vim.cmd("edit " .. files[1])
--- 		end
--- 	end
--- end, { desc = "Open previous numbered file" })
 
 vim.keymap.set("n", "<Leader>td", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
 

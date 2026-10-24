@@ -9,7 +9,7 @@ Personal Neovim config, written in Lua and managed with [lazy.nvim](https://gith
 - `lua/nvim-options.lua`: editor options.
 - `lua/commands.lua`: user commands and autocommands.
 - `lua/plugins/*.lua`: one plugin spec per file. lazy.nvim loads every file in this folder through `require("lazy").setup("plugins")`.
-- `lua/plugins/*.lua.old`: disabled plugins. lazy.nvim skips them. Leave them alone unless asked.
+  To disable a plugin, delete its file; git history keeps it.
 - `ftplugin/*.lua`: settings for each filetype.
 - `lazy-lock.json`: pinned plugin versions. Only lazy.nvim should change it, so don't edit it by hand.
 

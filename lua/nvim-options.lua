@@ -26,7 +26,7 @@ vim.api.nvim_create_autocmd("ExitPre", {
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-	pattern = { "*.py", "*.rs", "*.lua", "*.typ", "*.ml", "*.hs" },
+	pattern = { "*.py", "*.rs", "*.lua", "*.typ", "*.ml" },
 	callback = function()
 		vim.lsp.buf.format()
 	end,

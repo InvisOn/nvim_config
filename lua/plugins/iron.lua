@@ -2,36 +2,6 @@ return {
 	"Vigemus/iron.nvim",
 	lazy = false,
 	config = function()
-		local function smart_haskell_format(lines)
-			-- Don't wrap single lines
-			if #lines == 1 then
-				return lines[1] .. "\n"
-			end
-
-			-- Don't wrap if already wrapped
-			local first_line = vim.trim(lines[1])
-			local last_line = vim.trim(lines[#lines])
-			if first_line == ":{" and last_line == ":}" then
-				return table.concat(lines, "\n")
-			end
-
-			-- Don't wrap simple expressions (heuristic)
-			local text = table.concat(lines, " ")
-			if text:match("^%s*[%w_]+%s*=%s*") and not text:match("where") and not text:match("let") then
-				-- Simple assignment, might not need wrapping
-				return table.concat(lines, "\n")
-			end
-
-			-- Wrap multiline function definitions, let blocks, etc.
-			local result = { ":{" }
-			for _, line in ipairs(lines) do
-				table.insert(result, line)
-			end
-			table.insert(result, ":}\n")
-
-			return table.concat(result, "\n")
-		end
-
 		local iron = require("iron.core")
 		local view = require("iron.view")
 
@@ -50,14 +20,6 @@ return {
 						-- Can be a table or a function that
 						-- returns a table (see below)
 						command = { "fish" },
-					},
-					haskell = {
-						command = function(meta)
-							local file = vim.api.nvim_buf_get_name(meta.current_bufnr)
-							-- call `require` in case iron is set up before haskell-tools
-							return require("haskell-tools").repl.mk_repl_cmd(file)
-						end,
-						format = smart_haskell_format,
 					},
 				},
 				-- How the repl window will be displayed

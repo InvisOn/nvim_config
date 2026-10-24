@@ -45,9 +45,45 @@ return {
 				})
 			end, { desc = "Telescope diagnostics" })
 
-			vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Telescope git status" })
+			-- Git diff previews rendered by delta. Runs in a terminal so git pipes
+			-- through delta as its pager; preview scrolling goes to delta's less.
+			local previewers = require("telescope.previewers")
+			local function delta_previewer(build_args)
+				return previewers.new_termopen_previewer({
+					get_command = function(entry)
+						local file, args = build_args(entry)
+						return vim.list_extend({ "git", "-C", vim.fs.dirname(file), "-c", "core.pager=delta" }, args)
+					end,
+				})
+			end
 
-			vim.keymap.set("n", "<leader>gb", builtin.git_bcommits, { desc = "Telescope buffer commits" })
+			local delta_status = delta_previewer(function(entry)
+				if entry.status:match("%?") then
+					-- untracked: show the whole file as added
+					return entry.path, { "diff", "--no-index", "--", "/dev/null", entry.path }
+				end
+				-- staged and unstaged changes together
+				return entry.path, { "diff", "HEAD", "--", entry.path }
+			end)
+
+			local delta_bcommits = delta_previewer(function(entry)
+				return entry.current_file,
+					{ "show", "--format=%h %s%n%an, %ar%n", entry.value, "--", entry.current_file }
+			end)
+
+			-- file list 20%, diff 80%
+			local diff_layout = {
+				layout_strategy = "horizontal",
+				layout_config = { width = 0.95, height = 0.9, preview_width = 0.75 },
+			}
+
+			vim.keymap.set("n", "<leader>gs", function()
+				builtin.git_status(vim.tbl_extend("force", diff_layout, { previewer = delta_status }))
+			end, { desc = "Telescope git status" })
+
+			vim.keymap.set("n", "<leader>gb", function()
+				builtin.git_bcommits(vim.tbl_extend("force", diff_layout, { previewer = delta_bcommits }))
+			end, { desc = "Telescope buffer commits" })
 
 			local telescope = require("telescope")
 

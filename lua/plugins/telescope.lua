@@ -48,11 +48,12 @@ return {
 			-- Git diff previews rendered by delta. Runs in a terminal so git pipes
 			-- through delta as its pager; preview scrolling goes to delta's less.
 			local previewers = require("telescope.previewers")
-			local function delta_previewer(build_args)
+			local function delta_previewer(build_args, delta_flags)
+				local pager = "core.pager=delta" .. (delta_flags and (" " .. delta_flags) or "")
 				return previewers.new_termopen_previewer({
 					get_command = function(entry)
 						local file, args = build_args(entry)
-						return vim.list_extend({ "git", "-C", vim.fs.dirname(file), "-c", "core.pager=delta" }, args)
+						return vim.list_extend({ "git", "-C", vim.fs.dirname(file), "-c", pager }, args)
 					end,
 				})
 			end
@@ -64,12 +65,12 @@ return {
 				end
 				-- staged and unstaged changes together
 				return entry.path, { "diff", "HEAD", "--", entry.path }
-			end)
+			end, "--line-numbers")
 
 			local delta_bcommits = delta_previewer(function(entry)
 				return entry.current_file,
 					{ "show", "--format=%h %s%n%an, %ar%n", entry.value, "--", entry.current_file }
-			end)
+			end, "--line-numbers")
 
 			-- file list 25%, diff 75%
 			local diff_layout = {

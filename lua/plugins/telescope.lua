@@ -45,40 +45,9 @@ return {
 				})
 			end, { desc = "Telescope diagnostics" })
 
-			local telescope = require("telescope")
+			vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Telescope git status" })
 
-			telescope.setup({
-				pickers = {
-					buffers = {
-						layout_config = {
-							horizontal = {
-								width = 0.7, -- Overall width
-								height = 0.8, -- Overall height
-								-- preview_width = 0.75, -- Preview pane width ratio
-								-- prompt_position = "top", -- Optional: move prompt to top
-							},
-						},
-						show_all_buffers = false,
-						sort_lastused = true,
-						mappings = {
-							i = {
-								["<c-d>"] = "delete_buffer",
-							},
-						},
-					},
-				},
-				extensions = {
-					["ui-select"] = {
-						require("telescope.themes").get_dropdown({}),
-					},
-				},
-				defaults = {
-					file_ignore_patterns = {
-						"node_modules",
-						".git/",
-					},
-				},
-			})
+			vim.keymap.set("n", "<leader>gb", builtin.git_bcommits, { desc = "Telescope buffer commits" })
 
 			local telescope = require("telescope")
 
@@ -120,6 +89,14 @@ return {
 				},
 				pickers = {
 					buffers = {
+						layout_config = {
+							horizontal = {
+								width = 0.7,
+								height = 0.8,
+							},
+						},
+						show_all_buffers = false,
+						sort_lastused = true,
 						mappings = {
 							i = { ["<C-d>"] = wipeout_buf },
 							n = { ["<C-d>"] = wipeout_buf },

@@ -124,7 +124,7 @@ return {
 						"n",
 						"gd",
 						require("telescope.builtin").lsp_definitions,
-						vim.tbl_extend("force", opts, { desc = "LSP go to definition" })
+						vim.tbl_extend("force", opts, { desc = "Telescope: LSP go to definition" })
 					)
 					vim.keymap.set(
 						"n",

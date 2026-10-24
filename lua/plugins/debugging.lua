@@ -94,26 +94,26 @@ return {
 
 		vim.keymap.set("n", "<leader>dc", function()
 			dap.continue()
-		end, { desc = "debug continue" })
+		end, { desc = "DAP: Continue" })
 
 		vim.keymap.set("n", "<leader>dv", function()
 			dap.step_over()
-		end, { desc = "debug step_over" })
+		end, { desc = "DAP: Step over" })
 
 		vim.keymap.set("n", "<leader>di", function()
 			dap.step_into()
-		end, { desc = "debug step_into" })
+		end, { desc = "DAP: Step into" })
 
 		vim.keymap.set("n", "<leader>do", function()
 			dap.step_out()
-		end, { desc = "debug step_out" })
+		end, { desc = "DAP: Step out" })
 
 		vim.keymap.set("n", "<leader>dt", function()
 			dap.toggle_breakpoint()
-		end, { desc = "toggle_breakpoint" })
+		end, { desc = "DAP: Toggle breakpoint" })
 
 		vim.keymap.set("n", "<leader>db", function()
 			dap.set_breakpoint()
-		end, { desc = "debug set_breakpoint" })
+		end, { desc = "DAP: Set breakpoint" })
 	end,
 }

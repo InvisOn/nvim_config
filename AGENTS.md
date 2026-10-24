@@ -17,10 +17,13 @@ Personal Neovim config, written in Lua and managed with [lazy.nvim](https://gith
 
 - Each plugin file returns a lazy.nvim spec table. Do the setup inside `config = function() ... end`.
 - Give every keymap a `desc` so it shows up in Telescope's keymap search (`<leader>mm`).
+- For a keymap that uses a plugin, start the `desc` with the plugin's name, e.g. `"Gitsigns: Reset hunk"` or `"Telescope: Live grep"`. Keymaps for built-in features (LSP, diagnostics, buffers) don't get a prefix.
 - Keymaps that belong to a plugin go in that plugin's file. Buffer-local maps go in the plugin's `on_attach`, as in `lua/plugins/git.lua`.
 - Before adding a keymap, grep for the key to make sure it isn't already taken, for example `grep -rn '<leader>gr' lua`.
 - Current `<leader>` groups:
+  - `d`: debugging (DAP)
   - `g`: git and grep
+  - `l`: LSP and diagnostics
   - `f`: find
   - `q`: closing buffers
   - `t`: Telescope extras

@@ -11,40 +11,40 @@ return {
 
 			vim.keymap.set("n", "<Leader>ff", function()
 				builtin.find_files({ hidden = false })
-			end, { desc = "Find files" })
+			end, { desc = "Telescope: Find files" })
 
 			vim.keymap.set("n", "<Leader>fw", function()
 				builtin.find_files({ hidden = false, default_text = vim.fn.expand("<cword>") })
-			end, { desc = "Find files matching word under cursor" })
+			end, { desc = "Telescope: Find files matching word under cursor" })
 
-			vim.keymap.set("n", "<Leader>gg", builtin.live_grep, { desc = "Telescope live grep" })
+			vim.keymap.set("n", "<Leader>gg", builtin.live_grep, { desc = "Telescope: Live grep" })
 
 			vim.keymap.set("n", "<leader>gw", function()
 				builtin.live_grep({
 					default_text = vim.fn.expand("<cword>"),
 				})
-			end, { desc = "Find word under cursor with live grep" })
+			end, { desc = "Telescope: Live grep word under cursor" })
 
 			vim.keymap.set("n", "<Leader><Tab>", function()
 				builtin.buffers()
-			end, { desc = "Telescope buffers" })
+			end, { desc = "Telescope: Buffers" })
 
-			vim.keymap.set("n", "<Leader>mm", builtin.keymaps, { desc = "Telescope keymaps" })
+			vim.keymap.set("n", "<Leader>mm", builtin.keymaps, { desc = "Telescope: Keymaps" })
 
-			vim.keymap.set("n", "<Leader>yy", builtin.registers, { desc = "Telescope yank history" })
+			vim.keymap.set("n", "<Leader>yy", builtin.registers, { desc = "Telescope: Registers" })
 
-			vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Help tags" })
+			vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Telescope: Help tags" })
 
-			vim.keymap.set("n", "<leader>gr", builtin.lsp_references, { desc = "Go to references" })
+			vim.keymap.set("n", "<leader>gr", builtin.lsp_references, { desc = "Telescope: LSP references" })
 
-			vim.keymap.set("n", "<leader>tr", builtin.resume, { desc = "Resume last telescope session" })
+			vim.keymap.set("n", "<leader>tr", builtin.resume, { desc = "Telescope: Resume last picker" })
 
 			vim.keymap.set("n", "<leader>dd", function()
 				builtin.diagnostics({
 					layout_strategy = "vertical",
 					layout_config = { preview_cutoff = 0, preview_height = 0.7 },
 				})
-			end, { desc = "Telescope diagnostics" })
+			end, { desc = "Telescope: Diagnostics" })
 
 			-- Git diff previews rendered by delta. Runs in a terminal so git pipes
 			-- through delta as its pager; preview scrolling goes to delta's less.
@@ -81,11 +81,11 @@ return {
 
 			vim.keymap.set("n", "<leader>gs", function()
 				builtin.git_status(vim.tbl_extend("force", diff_layout, { previewer = delta_status }))
-			end, { desc = "Telescope git status" })
+			end, { desc = "Telescope: Git status" })
 
 			vim.keymap.set("n", "<leader>gb", function()
 				builtin.git_bcommits(vim.tbl_extend("force", diff_layout, { previewer = delta_bcommits }))
-			end, { desc = "Telescope buffer commits" })
+			end, { desc = "Telescope: Buffer commits" })
 
 			local telescope = require("telescope")
 
@@ -192,7 +192,7 @@ return {
 			})
 		end,
 		keys = { -- load the plugin only when using it's keybinding:
-			{ "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+			{ "<leader>u", "<cmd>lua require('undotree').toggle()<cr>", desc = "Undotree: Toggle" },
 		},
 	},
 }

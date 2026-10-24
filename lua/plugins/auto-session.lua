@@ -17,8 +17,8 @@ return {
 
 			vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
-			vim.keymap.set("n", "<leader>ss", ":Telescope session-lens<CR>", { desc = "Session Lens" })
-			vim.keymap.set("n", "<leader>sd", ":AutoSession delete<CR>", { desc = "Delete Session" })
+			vim.keymap.set("n", "<leader>ss", ":Telescope session-lens<CR>", { desc = "Auto-session: Search sessions" })
+			vim.keymap.set("n", "<leader>sd", ":AutoSession delete<CR>", { desc = "Auto-session: Delete session" })
 		end,
 	},
 }

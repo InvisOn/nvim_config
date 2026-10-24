@@ -5,6 +5,6 @@ return {
 		require("inc_rename").setup({})
 		vim.keymap.set("n", "<leader>lrn", function()
 			return ":IncRename " .. vim.fn.expand("<cword>")
-		end, { expr = true, desc = "Incremental rename" })
+		end, { expr = true, desc = "Inc-rename: Rename symbol" })
 	end,
 }

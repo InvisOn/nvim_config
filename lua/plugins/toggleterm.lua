@@ -11,14 +11,10 @@ return {
 		vim.keymap.set("n", "<leader>xr", function()
 			vim.cmd("w")
 			vim.cmd('TermExec cmd="cargo run"')
-		end, { desc = "Execute cargo run in terminal" })
-		-- vim.keymap.set("n", "<leader>ot", function()
-		-- 	vim.cmd("w")
-		-- 	vim.cmd('TermExec cmd="cargo test"')
-		-- end, { desc = "Cargo test" })
+		end, { desc = "Toggleterm: Save and cargo run" })
 		vim.keymap.set("n", "<leader>xt", function()
 			vim.cmd("w")
 			vim.cmd('TermExec cmd="cargo test"')
-		end, { desc = "Execute cargo test command in terminal" })
+		end, { desc = "Toggleterm: Save and cargo test" })
 	end,
 }

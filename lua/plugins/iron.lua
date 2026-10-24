@@ -53,9 +53,9 @@ return {
 		})
 
 		-- iron also has a list of commands, see :h iron-commands for all available commands
-		vim.keymap.set("n", "<space>rs", "<cmd>IronRepl<CR>", { desc = "Open REPL" })
-		vim.keymap.set("n", "<space>rrs", "<cmd>IronRestart<CR>", { desc = "Restart REPL" })
-		vim.keymap.set("n", "<space>rf", "<cmd>IronFocus<CR>", { desc = "Focus REPL" })
-		vim.keymap.set("n", "<space>rh", "<cmd>IronHide<CR>", { desc = "Hide REPL" })
+		vim.keymap.set("n", "<space>rs", "<cmd>IronRepl<CR>", { desc = "Iron: Open REPL" })
+		vim.keymap.set("n", "<space>rrs", "<cmd>IronRestart<CR>", { desc = "Iron: Restart REPL" })
+		vim.keymap.set("n", "<space>rf", "<cmd>IronFocus<CR>", { desc = "Iron: Focus REPL" })
+		vim.keymap.set("n", "<space>rh", "<cmd>IronHide<CR>", { desc = "Iron: Hide REPL" })
 	end,
 }

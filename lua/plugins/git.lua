@@ -17,22 +17,22 @@ return {
                         else
                             gs.nav_hunk("next")
                         end
-                    end, "Next git hunk")
+                    end, "Gitsigns: Next hunk")
                     map("[c", function()
                         if vim.wo.diff then
                             vim.cmd.normal({ "[c", bang = true })
                         else
                             gs.nav_hunk("prev")
                         end
-                    end, "Previous git hunk")
+                    end, "Gitsigns: Previous hunk")
 
-                    map("<leader>gp", gs.preview_hunk_inline, "Preview git hunk inline")
+                    map("<leader>gp", gs.preview_hunk_inline, "Gitsigns: Preview hunk inline")
 
                     -- reset hunk under cursor; in visual mode reset only the selected lines
-                    map("<leader>gu", gs.reset_hunk, "Reset git hunk")
+                    map("<leader>gu", gs.reset_hunk, "Gitsigns: Reset hunk")
                     vim.keymap.set("v", "<leader>gu", function()
                         gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-                    end, { buffer = bufnr, desc = "Reset selected git lines" })
+                    end, { buffer = bufnr, desc = "Gitsigns: Reset selected lines" })
 
                     -- whole-buffer inline diff: line colors, word diff, deleted lines
                     map("<leader>gi", function()
@@ -40,7 +40,7 @@ return {
                         gs.toggle_linehl(on)
                         gs.toggle_word_diff(on)
                         gs.toggle_deleted(on)
-                    end, "Toggle inline git diff")
+                    end, "Gitsigns: Toggle inline diff")
                 end,
             })
         end,

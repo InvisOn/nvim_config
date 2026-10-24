@@ -9,12 +9,12 @@ vim.api.nvim_set_keymap("n", "<leader>o", "1z=", { noremap = true, desc = "Fix t
 vim.keymap.set("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 vim.keymap.set("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 
-vim.keymap.set("n", "<leader>qt", ":Bdelete<CR>", { desc = "Close current active buffer" })
+vim.keymap.set("n", "<leader>qt", ":Bdelete<CR>", { desc = "Bbye: Close current buffer" })
 vim.keymap.set("n", "<leader>qi", ":%bd|e#<CR>", { desc = "Close current inactive buffers" })
 vim.keymap.set("n", "<leader>qa", ":%bd<CR>", { desc = "Close all buffers" })
 vim.keymap.set("n", "<leader>h", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
-vim.keymap.set("n", "<leader>e", ":w<CR>:TermExec cmd='make'<CR>", { desc = "Make run" })
+vim.keymap.set("n", "<leader>e", ":w<CR>:TermExec cmd='make'<CR>", { desc = "Toggleterm: Save and run make" })
 
 vim.keymap.set(
 	"n",
@@ -198,7 +198,7 @@ vim.keymap.set("n", "<leader>gd", function()
 	})
 end, { desc = "Git diff current file (delta)" })
 
-vim.keymap.set("n", "<Leader>td", ":TodoTelescope<CR>", { desc = "Telescope TODO" })
+vim.keymap.set("n", "<Leader>td", ":TodoTelescope<CR>", { desc = "Todo-comments: Search TODOs in Telescope" })
 
 vim.api.nvim_set_keymap("i", "<C-t>", " TODO: ", { noremap = true, silent = true, desc = "Insert todo comment" })
 vim.api.nvim_set_keymap("n", "<C-t>", "A TODO: ", { noremap = true, silent = true, desc = "Insert todo" })

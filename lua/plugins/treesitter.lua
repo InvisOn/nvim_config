@@ -73,34 +73,34 @@ return {
 			for lhs, query in pairs(select_maps) do
 				vim.keymap.set({ "x", "o" }, lhs, function()
 					sel.select_textobject(query, "textobjects")
-				end)
+				end, { desc = "Treesitter: Select " .. query })
 			end
 
 			-- Motion mappings
 			vim.keymap.set({ "n", "x", "o" }, "]m", function()
 				move.goto_next_start("@function.outer", "textobjects")
-			end)
+			end, { desc = "Treesitter: Next start of @function.outer" })
 			vim.keymap.set({ "n", "x", "o" }, "]]", function()
 				move.goto_next_start("@class.inner", "textobjects")
-			end)
+			end, { desc = "Treesitter: Next start of @class.inner" })
 			vim.keymap.set({ "n", "x", "o" }, "]M", function()
 				move.goto_next_end("@function.outer", "textobjects")
-			end)
+			end, { desc = "Treesitter: Next end of @function.outer" })
 			vim.keymap.set({ "n", "x", "o" }, "][", function()
 				move.goto_next_end("@class.outer", "textobjects")
-			end)
+			end, { desc = "Treesitter: Next end of @class.outer" })
 			vim.keymap.set({ "n", "x", "o" }, "[m", function()
 				move.goto_previous_start("@function.outer", "textobjects")
-			end)
+			end, { desc = "Treesitter: Previous start of @function.outer" })
 			vim.keymap.set({ "n", "x", "o" }, "[[", function()
 				move.goto_previous_start("@class.inner", "textobjects")
-			end)
+			end, { desc = "Treesitter: Previous start of @class.inner" })
 			vim.keymap.set({ "n", "x", "o" }, "[M", function()
 				move.goto_previous_end("@function.outer", "textobjects")
-			end)
+			end, { desc = "Treesitter: Previous end of @function.outer" })
 			vim.keymap.set({ "n", "x", "o" }, "[]", function()
 				move.goto_previous_end("@class.outer", "textobjects")
-			end)
+			end, { desc = "Treesitter: Previous end of @class.outer" })
 		end,
 	},
 }

@@ -12,6 +12,6 @@ return {
 				show_hidden = true,
 			},
 		})
-		vim.keymap.set("n", "<leader>b", ":Oil<CR>", { desc = "Open Oilbuffer picker" })
+		vim.keymap.set("n", "<leader>b", ":Oil<CR>", { desc = "Oil: Open file browser" })
 	end,
 }

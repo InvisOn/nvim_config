@@ -32,6 +32,14 @@ return {
 					color = "#c84cf3",
 					alt = { "NA" },
 				},
+				REVIEW = {
+					color = "#f38b4c",
+					alt = { "CR" },
+				},
+				NIT = {
+					color = "#4cc9f3",
+					alt = { "NITPICK" },
+				},
 			},
 		},
 	},

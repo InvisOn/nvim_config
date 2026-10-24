@@ -28,6 +28,12 @@ return {
 
                     map("<leader>gp", gs.preview_hunk_inline, "Preview git hunk inline")
 
+                    -- reset hunk under cursor; in visual mode reset only the selected lines
+                    map("<leader>gu", gs.reset_hunk, "Reset git hunk")
+                    vim.keymap.set("v", "<leader>gu", function()
+                        gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                    end, { buffer = bufnr, desc = "Reset selected git lines" })
+
                     -- whole-buffer inline diff: line colors, word diff, deleted lines
                     map("<leader>gi", function()
                         local on = not require("gitsigns.config").config.linehl

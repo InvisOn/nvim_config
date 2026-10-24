@@ -25,13 +25,6 @@ vim.api.nvim_create_autocmd("ExitPre", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-	pattern = { "*.py", "*.rs", "*.lua", "*.typ", "*.ml" },
-	callback = function()
-		vim.lsp.buf.format()
-	end,
-})
-
 vim.cmd([[augroup HelpLineNumber
   autocmd!
   autocmd FileType help setlocal relativenumber

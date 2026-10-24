@@ -110,11 +110,15 @@ return {
 					exportPdf = "never",
 					formatterMode = "typstyle",
 				},
-				on_attach = function()
-					vim.lsp.buf_request_sync(0, "workspace/executeCommand", {
-						command = "typst-lsp.doPinMain",
-						arguments = { vim.uri_from_fname(vim.fn.getcwd() .. "/main.typ") },
-					}, 1000)
+				-- pin the project's main.typ (if there is one) so previews and errors follow it
+				on_attach = function(client, bufnr)
+					local main = vim.fn.getcwd() .. "/main.typ"
+					if vim.uv.fs_stat(main) then
+						client:request("workspace/executeCommand", {
+							command = "tinymist.pinMain",
+							arguments = { main },
+						}, nil, bufnr)
+					end
 				end,
 			}
 

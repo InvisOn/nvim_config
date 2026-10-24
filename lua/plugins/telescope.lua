@@ -4,6 +4,7 @@ return {
 		dependencies = {
 			{ "nvim-lua/plenary.nvim" },
 			{ "nvim-telescope/telescope-ui-select.nvim" },
+			{ "nvim-telescope/telescope-fzf-native.nvim" },
 		},
 		config = function()
 			local builtin = require("telescope.builtin")
@@ -117,6 +118,12 @@ return {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown({}),
 					},
+					fzf = {
+						fuzzy = true,
+						override_generic_sorter = true,
+						override_file_sorter = true,
+						case_mode = "smart_case",
+					},
 				},
 				defaults = {
 					file_ignore_patterns = {
@@ -143,26 +150,13 @@ return {
 			})
 
 			telescope.load_extension("ui-select")
+			-- falls back to the default sorter if the native library isn't built yet
+			pcall(telescope.load_extension, "fzf")
 		end,
 	},
 	{
 		"nvim-telescope/telescope-fzf-native.nvim",
-		dependencies = {
-			"nvim-telescope/telescope.nvim",
-		},
 		build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
-		config = function()
-			require("telescope").setup({
-				extensions = {
-					["fzf"] = {
-						fuzzy = true,
-						override_generic_sorter = true,
-						override_file_sorter = true,
-						case_mode = "smart_case",
-					},
-				},
-			})
-		end,
 	},
 	{
 		"jiaoshijie/undotree",

@@ -37,18 +37,17 @@ local function get_visual_selection()
 	return table.concat(lines, "\n")
 end
 
-function Search_internet()
-	local query = "!firefox 'https://kagi.com/search?q=" .. get_visual_selection() .. "'"
-
-	vim.cmd(query)
+local function url_encode(text)
+	return (text:gsub("[^%w%-_%.~]", function(c)
+		return string.format("%%%02X", string.byte(c))
+	end))
 end
 
-vim.keymap.set(
-	"v",
-	"<leader>g",
-	":lua Search_internet()<CR>",
-	{ noremap = true, desc = "Search for the selelected text with Kagi" }
-)
+vim.keymap.set("v", "<leader>g", function()
+	-- leave visual mode first so the '< and '> marks point at this selection
+	vim.cmd("normal! \27")
+	vim.ui.open("https://kagi.com/search?q=" .. url_encode(get_visual_selection()))
+end, { desc = "Search for the selected text with Kagi" })
 
 vim.keymap.set("v", "<leader>y", '"+y', { noremap = true, desc = "Copy selection to clipboard" })
 vim.keymap.set("n", "<leader>p", '"+p', { noremap = true, desc = "Paste clipboard" })
@@ -97,27 +96,6 @@ end
 vim.keymap.set("n", "<leader>ir", insert_r_chunk, { desc = "Insert R code chunk" })
 vim.keymap.set("n", "<leader>ip", insert_py_chunk, { desc = "Insert Python code chunk" })
 vim.keymap.set("n", "<leader>ij", insert_julia_chunk, { desc = "Insert Julia code chunk" })
-
-vim.api.nvim_set_keymap(
-	"n",
-	"<leader>co",
-	"<CMD>CompilerOpen<CR>",
-	{ noremap = true, silent = true, desc = "Open compiler" }
-)
-
-vim.api.nvim_set_keymap(
-	"n",
-	"<leader>c",
-	"<CMD>CompilerStop<CR><CMD>CompilerRedo<CR>",
-	{ noremap = true, silent = true, desc = "Redo last selected option compiler" }
-)
-
-vim.api.nvim_set_keymap(
-	"n",
-	"<leader>ct",
-	"<CMD>CompilerToggleResults<CR>",
-	{ noremap = true, silent = true, desc = "Toggle compiler results" }
-)
 
 vim.keymap.set(
 	"v",

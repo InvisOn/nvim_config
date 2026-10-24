@@ -16,14 +16,14 @@ return {
 					opts = opts or {}
 					opts.default_text = opts.default_text or last
 					opts.attach_mappings = function(prompt_bufnr)
-						vim.api.nvim_create_autocmd("BufLeave", {
+						local prefix = require("telescope.actions.state").get_current_picker(prompt_bufnr).prompt_prefix
+						-- save when the picker closes, which wipes the prompt buffer
+						vim.api.nvim_create_autocmd("BufWipeout", {
 							buffer = prompt_bufnr,
 							once = true,
 							callback = function()
-								local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
-								if picker then
-									last = picker:_get_prompt()
-								end
+								local line = vim.api.nvim_buf_get_lines(prompt_bufnr, 0, 1, false)[1] or ""
+								last = line:sub(#prefix + 1)
 							end,
 						})
 						return true
@@ -159,7 +159,7 @@ return {
 					},
 					file_ignore_patterns = {
 						"node_modules",
-						".git/",
+						"%.git/",
 					},
 				},
 				pickers = {

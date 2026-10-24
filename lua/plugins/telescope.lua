@@ -11,11 +11,11 @@ return {
 
 			vim.keymap.set("n", "<Leader>ff", function()
 				builtin.find_files({ hidden = false })
-			end, { desc = "Telescope live grep" })
+			end, { desc = "Find files" })
 
 			vim.keymap.set("n", "<Leader>fw", function()
 				builtin.find_files({ hidden = false, default_text = vim.fn.expand("<cword>") })
-			end, { desc = "Telescope live grep" })
+			end, { desc = "Find files matching word under cursor" })
 
 			vim.keymap.set("n", "<Leader>gg", builtin.live_grep, { desc = "Telescope live grep" })
 

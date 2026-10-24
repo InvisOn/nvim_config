@@ -12,7 +12,7 @@ vim.keymap.set("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true
 vim.keymap.set("n", "<leader>qt", ":Bdelete<CR>", { desc = "Close current active buffer" })
 vim.keymap.set("n", "<leader>qi", ":%bd|e#<CR>", { desc = "Close current inactive buffers" })
 vim.keymap.set("n", "<leader>qa", ":%bd<CR>", { desc = "Close all buffers" })
-vim.keymap.set("n", "<leader>d", ":noh<CR>", { desc = "Deselect search" })
+vim.keymap.set("n", "<leader>h", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 vim.keymap.set("n", "<leader>e", ":w<CR>:TermExec cmd='make'<CR>", { desc = "Make run" })
 
@@ -43,7 +43,7 @@ local function url_encode(text)
 	end))
 end
 
-vim.keymap.set("v", "<leader>g", function()
+vim.keymap.set("v", "<leader>/", function()
 	-- leave visual mode first so the '< and '> marks point at this selection
 	vim.cmd("normal! \27")
 	vim.ui.open("https://kagi.com/search?q=" .. url_encode(get_visual_selection()))

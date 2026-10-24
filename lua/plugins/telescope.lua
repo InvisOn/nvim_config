@@ -9,34 +9,39 @@ return {
 		config = function()
 			local builtin = require("telescope.builtin")
 
+			-- wraps a picker so it opens with its previous search already typed in
+			local function remember_prompt(picker_fn)
+				local last = ""
+				return function(opts)
+					opts = opts or {}
+					opts.default_text = opts.default_text or last
+					opts.attach_mappings = function(prompt_bufnr)
+						vim.api.nvim_create_autocmd("BufLeave", {
+							buffer = prompt_bufnr,
+							once = true,
+							callback = function()
+								local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+								if picker then
+									last = picker:_get_prompt()
+								end
+							end,
+						})
+						return true
+					end
+					picker_fn(opts)
+				end
+			end
+
+			local find_files = remember_prompt(builtin.find_files)
+			local live_grep = remember_prompt(builtin.live_grep)
+
 			vim.keymap.set("n", "<Leader>ff", function()
-				builtin.find_files({ hidden = false })
+				find_files({ hidden = false })
 			end, { desc = "Telescope: Find files" })
 
 			vim.keymap.set("n", "<Leader>fw", function()
-				builtin.find_files({ hidden = false, default_text = vim.fn.expand("<cword>") })
+				find_files({ hidden = false, default_text = vim.fn.expand("<cword>") })
 			end, { desc = "Telescope: Find files matching word under cursor" })
-
-			-- live grep that opens with the previous search already typed in
-			local last_grep = ""
-			local function live_grep(opts)
-				opts = opts or {}
-				opts.default_text = opts.default_text or last_grep
-				opts.attach_mappings = function(prompt_bufnr)
-					vim.api.nvim_create_autocmd("BufLeave", {
-						buffer = prompt_bufnr,
-						once = true,
-						callback = function()
-							local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
-							if picker then
-								last_grep = picker:_get_prompt()
-							end
-						end,
-					})
-					return true
-				end
-				builtin.live_grep(opts)
-			end
 
 			vim.keymap.set("n", "<Leader>gg", live_grep, { desc = "Telescope: Live grep" })
 

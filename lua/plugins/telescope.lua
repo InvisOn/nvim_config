@@ -71,7 +71,7 @@ return {
 					{ "show", "--format=%h %s%n%an, %ar%n", entry.value, "--", entry.current_file }
 			end)
 
-			-- file list 20%, diff 80%
+			-- file list 25%, diff 75%
 			local diff_layout = {
 				layout_strategy = "horizontal",
 				layout_config = { width = 0.95, height = 0.9, preview_width = 0.75 },

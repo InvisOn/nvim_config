@@ -17,10 +17,31 @@ return {
 				builtin.find_files({ hidden = false, default_text = vim.fn.expand("<cword>") })
 			end, { desc = "Telescope: Find files matching word under cursor" })
 
-			vim.keymap.set("n", "<Leader>gg", builtin.live_grep, { desc = "Telescope: Live grep" })
+			-- live grep that opens with the previous search already typed in
+			local last_grep = ""
+			local function live_grep(opts)
+				opts = opts or {}
+				opts.default_text = opts.default_text or last_grep
+				opts.attach_mappings = function(prompt_bufnr)
+					vim.api.nvim_create_autocmd("BufLeave", {
+						buffer = prompt_bufnr,
+						once = true,
+						callback = function()
+							local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+							if picker then
+								last_grep = picker:_get_prompt()
+							end
+						end,
+					})
+					return true
+				end
+				builtin.live_grep(opts)
+			end
+
+			vim.keymap.set("n", "<Leader>gg", live_grep, { desc = "Telescope: Live grep" })
 
 			vim.keymap.set("n", "<leader>gw", function()
-				builtin.live_grep({
+				live_grep({
 					default_text = vim.fn.expand("<cword>"),
 				})
 			end, { desc = "Telescope: Live grep word under cursor" })

@@ -80,31 +80,37 @@ return {
       end, { desc = "Telescope: Diagnostics" })
 
       -- Git diff previews rendered by delta. Runs in a terminal so git pipes
-      -- through delta as its pager; preview scrolling goes to delta's less.
+      -- through delta as its pager; delta paging is off so <C-d>/<C-u> scroll the preview.
       local previewers = require("telescope.previewers")
-      local function delta_previewer(build_args, delta_flags)
-        local pager = "core.pager=delta" .. (delta_flags and (" " .. delta_flags) or "")
-        return previewers.new_termopen_previewer({
-          get_command = function(entry)
-            local file, args = build_args(entry)
-            return vim.list_extend({ "git", "-C", vim.fs.dirname(file), "-c", pager }, args)
-          end,
-        })
+      local delta_flags = "--line-numbers --paging=never"
+      local function delta_command(file, args)
+        return vim.list_extend({ "git", "-C", vim.fs.dirname(file), "-c", "core.pager=delta " .. delta_flags }, args)
       end
 
-      local delta_status = delta_previewer(function(entry)
+      local function status_args(entry)
         if entry.status:match("%?") then
           -- untracked: show the whole file as added
           return entry.path, { "diff", "--no-index", "--", "/dev/null", entry.path }
         end
         -- staged and unstaged changes together
         return entry.path, { "diff", "HEAD", "--", entry.path }
-      end, "--line-numbers")
+      end
 
-      local delta_bcommits = delta_previewer(function(entry)
+      local function bcommits_args(entry)
         return entry.current_file,
             { "show", "--format=%h %s%n%an, %ar%n", entry.value, "--", entry.current_file }
-      end, "--line-numbers")
+      end
+
+      local function delta_previewer(build_args)
+        return previewers.new_termopen_previewer({
+          get_command = function(entry)
+            return delta_command(build_args(entry))
+          end,
+        })
+      end
+
+      local delta_status = delta_previewer(status_args)
+      local delta_bcommits = delta_previewer(bcommits_args)
 
       -- file list 25%, diff 75%
       local diff_layout = {
@@ -120,82 +126,56 @@ return {
         builtin.git_bcommits(vim.tbl_extend("force", diff_layout, { previewer = delta_bcommits }))
       end, { desc = "Telescope: Buffer commits" })
 
-      -- one entry per changed hunk of the current buffer (vs HEAD); enter jumps to its first line
+      local telescope = require("telescope")
+
+      -- Current buffer's diff vs HEAD in one float, rendered by delta. <CR> jumps to the line under the cursor
+      -- (delta prints "old│new│" line numbers, so the new-file line is read back from the text); q/<Esc> closes.
       vim.keymap.set("n", "<leader>gd", function()
         local file = vim.api.nvim_buf_get_name(0)
-        local win = vim.api.nvim_get_current_win()
-        local lines = vim.fn.systemlist({
-          "git",
-          "-C",
-          vim.fs.dirname(file),
-          "diff",
-          "HEAD",
-          "-U0",
-          "--no-color",
-          "--",
-          file,
+        local source_win = vim.api.nvim_get_current_win()
+        local width, height = math.floor(vim.o.columns * 0.9), math.floor(vim.o.lines * 0.85)
+        local float_buf = vim.api.nvim_create_buf(false, true)
+        local float_win = vim.api.nvim_open_win(float_buf, true, {
+          relative = "editor",
+          width = width,
+          height = height,
+          col = math.floor((vim.o.columns - width) / 2),
+          row = math.floor((vim.o.lines - height) / 2 - 1),
+          style = "minimal",
+          border = "rounded",
+          title = " Buffer diff  <CR> jump · q close ",
         })
-        local hunks = {}
-        local header = {}
-        for _, line in ipairs(lines) do
-          local old_count, new_start, new_count = line:match("^@@ %-%d+,?(%d*) %+(%d+),?(%d*) @@")
-          if new_start then
-            old_count = old_count == "" and 1 or tonumber(old_count)
-            new_count = new_count == "" and 1 or tonumber(new_count)
-            table.insert(hunks, {
-              lnum = math.max(tonumber(new_start), 1),
-              label = ("line %s  +%d -%d"):format(new_start, new_count, old_count),
-              patch = vim.list_extend(vim.deepcopy(header), { line }),
-            })
-          elseif #hunks == 0 then
-            table.insert(header, line)
-          elseif vim.startswith(line, "+") or vim.startswith(line, "-") or vim.startswith(line, " ") then
-            table.insert(hunks[#hunks].patch, line)
+        vim.fn.termopen({
+          "git", "-C", vim.fs.dirname(file), "-c",
+          "core.pager=delta --paging=never --line-numbers --line-numbers-left-format='{nm:>4}│'"
+            .. " --line-numbers-right-format='{np:>4}│'",
+          "diff", "HEAD", "--", file,
+        })
+
+        local function close()
+          if vim.api.nvim_win_is_valid(float_win) then
+            vim.api.nvim_win_close(float_win, true)
           end
         end
-        if #hunks == 0 then
-          return vim.notify("No changes vs HEAD in this buffer", vim.log.levels.INFO)
-        end
-
-        require("telescope.pickers")
-            .new(vim.tbl_extend("force", diff_layout, {}), {
-              prompt_title = "Buffer diff",
-              finder = require("telescope.finders").new_table({
-                results = hunks,
-                entry_maker = function(hunk)
-                  return {
-                    value = hunk,
-                    ordinal = hunk.label,
-                    display = hunk.label,
-                  }
-                end,
-              }),
-              sorter = require("telescope.config").values.generic_sorter({}),
-              -- feed just this hunk's patch to delta through stdin
-              previewer = previewers.new_termopen_previewer({
-                get_command = function(entry)
-                  local patch_file = vim.fn.tempname()
-                  vim.fn.writefile(entry.value.patch, patch_file)
-                  return { "cmd", "/c", ('type "%s" | delta --line-numbers'):format(patch_file) }
-                end,
-              }),
-              attach_mappings = function(prompt_bufnr)
-                require("telescope.actions").select_default:replace(function()
-                  local entry = require("telescope.actions.state").get_selected_entry()
-                  require("telescope.actions").close(prompt_bufnr)
-                  if entry and vim.api.nvim_win_is_valid(win) then
-                    vim.api.nvim_set_current_win(win)
-                    vim.api.nvim_win_set_cursor(win, { entry.value.lnum, 0 })
-                    vim.cmd("normal! zz")
-                  end
-                end)
-                return true
-              end,
-            })
-            :find()
-      end, { desc = "Telescope: Buffer diff hunks (enter jumps to line)" })
-
-      local telescope = require("telescope")
+        vim.keymap.set("n", "q", close, { buffer = float_buf, nowait = true })
+        vim.keymap.set("n", "<Esc>", close, { buffer = float_buf, nowait = true })
+        vim.keymap.set("n", "<CR>", function()
+          local row = vim.api.nvim_win_get_cursor(0)[1]
+          local lines = vim.api.nvim_buf_get_lines(float_buf, 0, -1, false)
+          -- removed lines have no new number: use the next line that has one, then the previous
+          for _, index in ipairs(vim.list_extend(vim.fn.range(row, #lines), vim.fn.range(row - 1, 1, -1))) do
+            local lnum = lines[index]:match("^%s*%d*%s*│%s*(%d+)│")
+            if lnum then
+              close()
+              vim.api.nvim_set_current_win(source_win)
+              vim.api.nvim_win_set_cursor(source_win, { tonumber(lnum), 0 })
+              vim.cmd("normal! zz")
+              return
+            end
+          end
+        end, { buffer = float_buf, nowait = true })
+        vim.cmd("stopinsert")
+      end, { desc = "Buffer diff in a float (enter jumps to line)" })
 
       local wipeout_buf = function(prompt_bufnr)
         local action_state = require("telescope.actions.state")

@@ -28,7 +28,7 @@ local function get_visual_selection()
 end
 
 function Search_internet()
-	local query = '!"C:\\Program Files\\Mozilla Firefox\\firefox.exe" "https://google.com/search?q='
+	local query = '!"C:\\Program Files\\Mozilla Firefox\\firefox.exe" "https://kagi.com/search?q='
 		.. get_visual_selection()
 		.. '"'
 

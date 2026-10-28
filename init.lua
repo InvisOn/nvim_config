@@ -1,3 +1,5 @@
+vim.loader.enable()
+
 -- bootstrap lazy.vi plugin manager https://github.com/folke/lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -11,17 +13,6 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-
--- vim.g.rustaceanvim = {
---   server = {
---     cmd = { "lspmux", "client" },
---     default_settings = {
---       ["rust-analyzer"] = {
---         checkOnSave = false,
---       },
---     },
---   },
--- }
 
 local function set_diag_hl()
   local diag_hl = {

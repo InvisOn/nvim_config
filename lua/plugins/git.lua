@@ -31,18 +31,35 @@ return {
 				end
 			end
 
+			local function find_base_branch()
+				local cwd = vim.fn.expand("%:p:h")
+				local candidates = { "origin/HEAD", "main", "master", "develop", "origin/main", "origin/master", "origin/develop" }
+				for _, ref in ipairs(candidates) do
+					local result = vim.system({ "git", "rev-parse", "--verify", "--quiet", ref .. "^{commit}" }, { cwd = cwd }):wait()
+					if result.code == 0 then
+						return ref
+					end
+				end
+			end
+
 			local commit_signs_enabled = false
 			vim.keymap.set("n", "<leader>gt", function()
-				commit_signs_enabled = not commit_signs_enabled
-				if commit_signs_enabled then
+				if not commit_signs_enabled then
+					local base = find_base_branch()
+					if not base then
+						vim.notify("No main/master/develop branch found", vim.log.levels.WARN)
+						return
+					end
+					commit_signs_enabled = true
 					set_commit_sign_highlights()
-					gitsigns.change_base("main", true)
+					gitsigns.change_base(base, true)
 					return
 				end
+				commit_signs_enabled = false
 
 				gitsigns.change_base(nil, true, restore_default_sign_highlights)
 			end, {
-				desc = "Toggle Git gutter signs against main",
+				desc = "Toggle Git gutter signs against default branch",
 			})
 		end,
 	},

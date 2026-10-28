@@ -126,8 +126,60 @@ return {
 		"nvimtools/none-ls.nvim",
 		config = function()
 			local null_ls = require("null-ls")
+			local helpers = require("null-ls.helpers")
+
+			local nufmt = helpers.make_builtin({
+				name = "nufmt",
+				meta = { url = "https://github.com/nushell/nufmt", description = "Nushell formatter" },
+				method = null_ls.methods.FORMATTING,
+				filetypes = { "nu" },
+				generator_opts = {
+					command = "nufmt",
+					args = { "--stdin" },
+					to_stdin = true,
+				},
+				factory = helpers.formatter_factory,
+			})
+
+			local function cargo_root(params)
+				local manifest = vim.fs.find("Cargo.toml", { upward = true, path = vim.fs.dirname(params.bufname) })[1]
+				return manifest and vim.fs.dirname(manifest), manifest
+			end
+
+			-- Mirror `cargo fmt`: run rustfmt from the crate root with the crate's edition.
+			local rustfmt = helpers.make_builtin({
+				name = "rustfmt",
+				meta = { url = "https://github.com/rust-lang/rustfmt", description = "Rust formatter" },
+				method = null_ls.methods.FORMATTING,
+				filetypes = { "rust" },
+				generator_opts = {
+					command = "rustfmt",
+					args = function(params)
+						local _, manifest = cargo_root(params)
+						local edition = "2021"
+						for _, line in ipairs(manifest and vim.fn.readfile(manifest) or {}) do
+							local found = line:match('^%s*edition%s*=%s*"(%d+)"')
+							if found then
+								edition = found
+								break
+							end
+						end
+						return { "--emit=stdout", "--edition=" .. edition }
+					end,
+					cwd = function(params)
+						return (cargo_root(params))
+					end,
+					to_stdin = true,
+				},
+				factory = helpers.formatter_factory,
+			})
+
 			null_ls.setup({
-				-- sources = { null_ls.builtins.formatting.black },
+				sources = {
+					-- null_ls.builtins.formatting.black,
+					nufmt,
+					rustfmt,
+				},
 			})
 		end,
 	},

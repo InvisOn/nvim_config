@@ -1,344 +1,352 @@
 return {
-	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = {
-			{ "nvim-lua/plenary.nvim" },
-			{ "nvim-telescope/telescope-ui-select.nvim" },
-			{ "nvim-telescope/telescope-fzf-native.nvim" },
-		},
-		config = function()
-			local builtin = require("telescope.builtin")
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-telescope/telescope-ui-select.nvim" },
+      { "nvim-telescope/telescope-fzf-native.nvim" },
+    },
+    config = function()
+      local builtin = require("telescope.builtin")
 
-			-- wraps a picker so it opens with its previous search already typed in
-			local function remember_prompt(picker_fn)
-				local last = ""
-				return function(opts)
-					opts = opts or {}
-					opts.default_text = opts.default_text or last
-					opts.attach_mappings = function(prompt_bufnr)
-						local prefix = require("telescope.actions.state").get_current_picker(prompt_bufnr).prompt_prefix
-						-- save when the picker closes, which wipes the prompt buffer
-						vim.api.nvim_create_autocmd("BufWipeout", {
-							buffer = prompt_bufnr,
-							once = true,
-							callback = function()
-								local line = vim.api.nvim_buf_get_lines(prompt_bufnr, 0, 1, false)[1] or ""
-								last = line:sub(#prefix + 1)
-							end,
-						})
-						return true
-					end
-					picker_fn(opts)
-				end
-			end
+      -- wraps a picker so it opens with its previous search already typed in
+      local function remember_prompt(picker_fn)
+        local last = ""
+        return function(opts)
+          opts = opts or {}
+          opts.default_text = opts.default_text or last
+          opts.attach_mappings = function(prompt_bufnr)
+            local prefix = require("telescope.actions.state").get_current_picker(prompt_bufnr).prompt_prefix
+            -- save when the picker closes, which wipes the prompt buffer
+            vim.api.nvim_create_autocmd("BufWipeout", {
+              buffer = prompt_bufnr,
+              once = true,
+              callback = function()
+                local line = vim.api.nvim_buf_get_lines(prompt_bufnr, 0, 1, false)[1] or ""
+                last = line:sub(#prefix + 1)
+              end,
+            })
+            return true
+          end
+          picker_fn(opts)
+        end
+      end
 
-			local find_files = remember_prompt(builtin.find_files)
-			local live_grep = remember_prompt(builtin.live_grep)
+      local find_files = remember_prompt(builtin.find_files)
+      local live_grep = remember_prompt(builtin.live_grep)
 
-			vim.keymap.set("n", "<Leader>ff", function()
-				find_files({ hidden = false })
-			end, { desc = "Telescope: Find files" })
+      vim.keymap.set("n", "<Leader>ff", function()
+        find_files({ hidden = false })
+      end, { desc = "Telescope: Find files" })
 
-			vim.keymap.set("n", "<Leader>fw", function()
-				find_files({ hidden = false, default_text = vim.fn.expand("<cword>") })
-			end, { desc = "Telescope: Find files matching word under cursor" })
+      vim.keymap.set("n", "<Leader>fw", function()
+        find_files({ hidden = false, default_text = vim.fn.expand("<cword>") })
+      end, { desc = "Telescope: Find files matching word under cursor" })
 
-			vim.keymap.set("n", "<Leader>gg", live_grep, { desc = "Telescope: Live grep" })
+      vim.keymap.set("n", "<Leader>gg", live_grep, { desc = "Telescope: Live grep" })
 
-			vim.keymap.set("n", "<leader>gw", function()
-				live_grep({
-					default_text = vim.fn.expand("<cword>"),
-				})
-			end, { desc = "Telescope: Live grep word under cursor" })
+      vim.keymap.set("n", "<leader>gw", function()
+        live_grep({
+          default_text = vim.fn.expand("<cword>"),
+        })
+      end, { desc = "Telescope: Live grep word under cursor" })
 
-			vim.keymap.set("n", "<Leader><Tab>", function()
-				builtin.buffers()
-			end, { desc = "Telescope: Buffers" })
+      vim.keymap.set("n", "<Leader><Tab>", function()
+        builtin.buffers()
+      end, { desc = "Telescope: Buffers" })
 
-			vim.keymap.set("n", "<Leader>mm", builtin.keymaps, { desc = "Telescope: Keymaps" })
+      vim.keymap.set("n", "<Leader>mm", builtin.keymaps, { desc = "Telescope: Keymaps" })
 
-			vim.keymap.set("n", "<Leader>yy", builtin.registers, { desc = "Telescope: Registers" })
+      vim.keymap.set("n", "<Leader>yy", builtin.registers, { desc = "Telescope: Registers" })
 
-			vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Telescope: Help tags" })
+      vim.keymap.set("n", "<Leader>fh", builtin.help_tags, { desc = "Telescope: Help tags" })
 
-			vim.keymap.set("n", "<leader>gr", builtin.lsp_references, { desc = "Telescope: LSP references" })
+      vim.keymap.set("n", "<leader>gr", builtin.lsp_references, { desc = "Telescope: LSP references" })
 
-			vim.keymap.set("n", "<leader>tr", builtin.resume, { desc = "Telescope: Resume last picker" })
+      vim.keymap.set("n", "<leader>tr", builtin.resume, { desc = "Telescope: Resume last picker" })
 
-			vim.keymap.set(
-				"n",
-				"<leader>gO",
-				builtin.lsp_document_symbols,
-				{ desc = "Telescope: LSP document symbols" }
-			)
+      vim.keymap.set(
+        "n",
+        "<leader>gO",
+        builtin.lsp_document_symbols,
+        { desc = "Telescope: LSP document symbols" }
+      )
 
-			vim.keymap.set("n", "<leader>dd", function()
-				builtin.diagnostics({
-					layout_strategy = "vertical",
-					layout_config = { preview_cutoff = 0, preview_height = 0.7 },
-				})
-			end, { desc = "Telescope: Diagnostics" })
+      vim.keymap.set("n", "<leader>dd", function()
+        builtin.diagnostics({
+          layout_strategy = "vertical",
+          layout_config = { preview_cutoff = 0, preview_height = 0.7 },
+        })
+      end, { desc = "Telescope: Diagnostics" })
 
-			-- Git diff previews rendered by delta. Runs in a terminal so git pipes
-			-- through delta as its pager; preview scrolling goes to delta's less.
-			local previewers = require("telescope.previewers")
-			local function delta_previewer(build_args, delta_flags)
-				local pager = "core.pager=delta" .. (delta_flags and (" " .. delta_flags) or "")
-				return previewers.new_termopen_previewer({
-					get_command = function(entry)
-						local file, args = build_args(entry)
-						return vim.list_extend({ "git", "-C", vim.fs.dirname(file), "-c", pager }, args)
-					end,
-				})
-			end
+      -- Git diff previews rendered by delta. Runs in a terminal so git pipes
+      -- through delta as its pager; preview scrolling goes to delta's less.
+      local previewers = require("telescope.previewers")
+      local function delta_previewer(build_args, delta_flags)
+        local pager = "core.pager=delta" .. (delta_flags and (" " .. delta_flags) or "")
+        return previewers.new_termopen_previewer({
+          get_command = function(entry)
+            local file, args = build_args(entry)
+            return vim.list_extend({ "git", "-C", vim.fs.dirname(file), "-c", pager }, args)
+          end,
+        })
+      end
 
-			local delta_status = delta_previewer(function(entry)
-				if entry.status:match("%?") then
-					-- untracked: show the whole file as added
-					return entry.path, { "diff", "--no-index", "--", "/dev/null", entry.path }
-				end
-				-- staged and unstaged changes together
-				return entry.path, { "diff", "HEAD", "--", entry.path }
-			end, "--line-numbers")
+      local delta_status = delta_previewer(function(entry)
+        if entry.status:match("%?") then
+          -- untracked: show the whole file as added
+          return entry.path, { "diff", "--no-index", "--", "/dev/null", entry.path }
+        end
+        -- staged and unstaged changes together
+        return entry.path, { "diff", "HEAD", "--", entry.path }
+      end, "--line-numbers")
 
-			local delta_bcommits = delta_previewer(function(entry)
-				return entry.current_file,
-					{ "show", "--format=%h %s%n%an, %ar%n", entry.value, "--", entry.current_file }
-			end, "--line-numbers")
+      local delta_bcommits = delta_previewer(function(entry)
+        return entry.current_file,
+            { "show", "--format=%h %s%n%an, %ar%n", entry.value, "--", entry.current_file }
+      end, "--line-numbers")
 
-			-- file list 25%, diff 75%
-			local diff_layout = {
-				layout_strategy = "horizontal",
-				layout_config = { width = 0.95, height = 0.9, preview_width = 0.75 },
-			}
+      -- file list 25%, diff 75%
+      local diff_layout = {
+        layout_strategy = "horizontal",
+        layout_config = { width = 0.95, height = 0.9, preview_width = 0.75 },
+      }
 
-			vim.keymap.set("n", "<leader>gs", function()
-				builtin.git_status(vim.tbl_extend("force", diff_layout, { previewer = delta_status }))
-			end, { desc = "Telescope: Git status" })
+      vim.keymap.set("n", "<leader>gs", function()
+        builtin.git_status(vim.tbl_extend("force", diff_layout, { previewer = delta_status }))
+      end, { desc = "Telescope: Git status" })
 
-			vim.keymap.set("n", "<leader>gb", function()
-				builtin.git_bcommits(vim.tbl_extend("force", diff_layout, { previewer = delta_bcommits }))
-			end, { desc = "Telescope: Buffer commits" })
+      vim.keymap.set("n", "<leader>gb", function()
+        builtin.git_bcommits(vim.tbl_extend("force", diff_layout, { previewer = delta_bcommits }))
+      end, { desc = "Telescope: Buffer commits" })
 
-			-- one entry per changed hunk of the current buffer (vs HEAD); enter jumps to its first line
-			vim.keymap.set("n", "<leader>gd", function()
-				local file = vim.api.nvim_buf_get_name(0)
-				local win = vim.api.nvim_get_current_win()
-				local lines = vim.fn.systemlist({
-					"git", "-C", vim.fs.dirname(file), "diff", "HEAD", "-U0", "--no-color", "--", file,
-				})
-				local hunks = {}
-				local header = {}
-				for _, line in ipairs(lines) do
-					local old_count, new_start, new_count = line:match("^@@ %-%d+,?(%d*) %+(%d+),?(%d*) @@")
-					if new_start then
-						old_count = old_count == "" and 1 or tonumber(old_count)
-						new_count = new_count == "" and 1 or tonumber(new_count)
-						table.insert(hunks, {
-							lnum = math.max(tonumber(new_start), 1),
-							label = ("line %s  +%d -%d"):format(new_start, new_count, old_count),
-							patch = vim.list_extend(vim.deepcopy(header), { line }),
-						})
-					elseif #hunks == 0 then
-						table.insert(header, line)
-					elseif vim.startswith(line, "+") or vim.startswith(line, "-") or vim.startswith(line, " ") then
-						table.insert(hunks[#hunks].patch, line)
-					end
-				end
-				if #hunks == 0 then
-					return vim.notify("No changes vs HEAD in this buffer", vim.log.levels.INFO)
-				end
+      -- one entry per changed hunk of the current buffer (vs HEAD); enter jumps to its first line
+      vim.keymap.set("n", "<leader>gd", function()
+        local file = vim.api.nvim_buf_get_name(0)
+        local win = vim.api.nvim_get_current_win()
+        local lines = vim.fn.systemlist({
+          "git",
+          "-C",
+          vim.fs.dirname(file),
+          "diff",
+          "HEAD",
+          "-U0",
+          "--no-color",
+          "--",
+          file,
+        })
+        local hunks = {}
+        local header = {}
+        for _, line in ipairs(lines) do
+          local old_count, new_start, new_count = line:match("^@@ %-%d+,?(%d*) %+(%d+),?(%d*) @@")
+          if new_start then
+            old_count = old_count == "" and 1 or tonumber(old_count)
+            new_count = new_count == "" and 1 or tonumber(new_count)
+            table.insert(hunks, {
+              lnum = math.max(tonumber(new_start), 1),
+              label = ("line %s  +%d -%d"):format(new_start, new_count, old_count),
+              patch = vim.list_extend(vim.deepcopy(header), { line }),
+            })
+          elseif #hunks == 0 then
+            table.insert(header, line)
+          elseif vim.startswith(line, "+") or vim.startswith(line, "-") or vim.startswith(line, " ") then
+            table.insert(hunks[#hunks].patch, line)
+          end
+        end
+        if #hunks == 0 then
+          return vim.notify("No changes vs HEAD in this buffer", vim.log.levels.INFO)
+        end
 
-				require("telescope.pickers")
-					.new(vim.tbl_extend("force", diff_layout, {}), {
-						prompt_title = "Buffer diff",
-						finder = require("telescope.finders").new_table({
-							results = hunks,
-							entry_maker = function(hunk)
-								return {
-									value = hunk,
-									ordinal = hunk.label,
-									display = hunk.label,
-								}
-							end,
-						}),
-						sorter = require("telescope.config").values.generic_sorter({}),
-						-- feed just this hunk's patch to delta through stdin
-						previewer = previewers.new_termopen_previewer({
-							get_command = function(entry)
-								local patch_file = vim.fn.tempname()
-								vim.fn.writefile(entry.value.patch, patch_file)
-								return { "cmd", "/c", ('type "%s" | delta --line-numbers'):format(patch_file) }
-							end,
-						}),
-						attach_mappings = function(prompt_bufnr)
-							require("telescope.actions").select_default:replace(function()
-								local entry = require("telescope.actions.state").get_selected_entry()
-								require("telescope.actions").close(prompt_bufnr)
-								if entry and vim.api.nvim_win_is_valid(win) then
-									vim.api.nvim_set_current_win(win)
-									vim.api.nvim_win_set_cursor(win, { entry.value.lnum, 0 })
-									vim.cmd("normal! zz")
-								end
-							end)
-							return true
-						end,
-					})
-					:find()
-			end, { desc = "Telescope: Buffer diff hunks (enter jumps to line)" })
+        require("telescope.pickers")
+            .new(vim.tbl_extend("force", diff_layout, {}), {
+              prompt_title = "Buffer diff",
+              finder = require("telescope.finders").new_table({
+                results = hunks,
+                entry_maker = function(hunk)
+                  return {
+                    value = hunk,
+                    ordinal = hunk.label,
+                    display = hunk.label,
+                  }
+                end,
+              }),
+              sorter = require("telescope.config").values.generic_sorter({}),
+              -- feed just this hunk's patch to delta through stdin
+              previewer = previewers.new_termopen_previewer({
+                get_command = function(entry)
+                  local patch_file = vim.fn.tempname()
+                  vim.fn.writefile(entry.value.patch, patch_file)
+                  return { "cmd", "/c", ('type "%s" | delta --line-numbers'):format(patch_file) }
+                end,
+              }),
+              attach_mappings = function(prompt_bufnr)
+                require("telescope.actions").select_default:replace(function()
+                  local entry = require("telescope.actions.state").get_selected_entry()
+                  require("telescope.actions").close(prompt_bufnr)
+                  if entry and vim.api.nvim_win_is_valid(win) then
+                    vim.api.nvim_set_current_win(win)
+                    vim.api.nvim_win_set_cursor(win, { entry.value.lnum, 0 })
+                    vim.cmd("normal! zz")
+                  end
+                end)
+                return true
+              end,
+            })
+            :find()
+      end, { desc = "Telescope: Buffer diff hunks (enter jumps to line)" })
 
-			local telescope = require("telescope")
+      local telescope = require("telescope")
 
-			local wipeout_buf = function(prompt_bufnr)
-				local action_state = require("telescope.actions.state")
-				local current_picker = action_state.get_current_picker(prompt_bufnr)
+      local wipeout_buf = function(prompt_bufnr)
+        local action_state = require("telescope.actions.state")
+        local current_picker = action_state.get_current_picker(prompt_bufnr)
 
-				current_picker:delete_selection(function(selection)
-					local wins = vim.tbl_filter(function(win)
-						return vim.api.nvim_win_get_buf(win) == selection.bufnr
-					end, vim.api.nvim_list_wins())
+        current_picker:delete_selection(function(selection)
+          local wins = vim.tbl_filter(function(win)
+            return vim.api.nvim_win_get_buf(win) == selection.bufnr
+          end, vim.api.nvim_list_wins())
 
-					for _, win in ipairs(wins) do
-						-- use enew regardless, safest option
-						vim.api.nvim_win_call(win, function()
-							vim.cmd("enew")
-						end)
-					end
+          for _, win in ipairs(wins) do
+            -- use enew regardless, safest option
+            vim.api.nvim_win_call(win, function()
+              vim.cmd("enew")
+            end)
+          end
 
-					local ok, err = pcall(vim.api.nvim_buf_delete, selection.bufnr, { force = true })
-					if not ok then
-						vim.notify("failed: " .. tostring(err), vim.log.levels.ERROR)
-					end
-					return ok
-				end)
-			end
+          local ok, err = pcall(vim.api.nvim_buf_delete, selection.bufnr, { force = true })
+          if not ok then
+            vim.notify("failed: " .. tostring(err), vim.log.levels.ERROR)
+          end
+          return ok
+        end)
+      end
 
-			telescope.setup({
-				extensions = {
-					["ui-select"] = {
-						require("telescope.themes").get_dropdown({}),
-					},
-					fzf = {
-						fuzzy = true,
-						override_generic_sorter = true,
-						override_file_sorter = true,
-						case_mode = "smart_case",
-					},
-				},
-				defaults = {
-					path_display = function(opts, path)
-						return (path:gsub("/", "\\"))
-					end,
-					-- bigger window, preview takes most of it
-					layout_config = {
-						horizontal = { width = 0.95, height = 0.9, preview_width = 0.65 },
-						vertical = { width = 0.95, height = 0.95, preview_height = 0.6 },
-					},
-					file_ignore_patterns = {
-						"node_modules",
-						"%.git/",
-					},
-				},
-				pickers = {
-					live_grep = {
-						on_input_filter_cb = function(prompt)
-							return { prompt = prompt }
-						end,
-					},
-					grep_string = {
-						on_input_filter_cb = function(prompt)
-							return { prompt = prompt }
-						end,
-					},
-					buffers = {
-						layout_config = {
-							horizontal = {
-								width = 0.7,
-								height = 0.8,
-							},
-						},
-						show_all_buffers = false,
-						sort_lastused = true,
-						mappings = {
-							i = { ["<C-d>"] = wipeout_buf },
-							n = { ["<C-d>"] = wipeout_buf },
-						},
-					},
-				},
-			})
+      telescope.setup({
+        extensions = {
+          ["ui-select"] = {
+            require("telescope.themes").get_dropdown({}),
+          },
+          fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+          },
+        },
+        defaults = {
+          path_display = function(opts, path)
+            return (path:gsub("/", "\\"))
+          end,
+          -- bigger window, preview takes most of it
+          layout_config = {
+            horizontal = { width = 0.95, height = 0.9, preview_width = 0.65 },
+            vertical = { width = 0.95, height = 0.95, preview_height = 0.6 },
+          },
+          file_ignore_patterns = {
+            "node_modules",
+            "%.git/",
+          },
+        },
+        pickers = {
+          live_grep = {
+            on_input_filter_cb = function(prompt)
+              return { prompt = prompt }
+            end,
+          },
+          grep_string = {
+            on_input_filter_cb = function(prompt)
+              return { prompt = prompt }
+            end,
+          },
+          buffers = {
+            layout_config = {
+              horizontal = {
+                width = 0.7,
+                height = 0.8,
+              },
+            },
+            show_all_buffers = false,
+            sort_lastused = true,
+            mappings = {
+              i = { ["<C-d>"] = wipeout_buf },
+              n = { ["<C-d>"] = wipeout_buf },
+            },
+          },
+        },
+      })
 
-			telescope.load_extension("ui-select")
-			-- falls back to the default sorter if the native library isn't built yet
-			pcall(telescope.load_extension, "fzf")
+      telescope.load_extension("ui-select")
+      -- falls back to the default sorter if the native library isn't built yet
+      pcall(telescope.load_extension, "fzf")
 
-			-- accept both slash styles (and markdown-escaped `\_`) in the prompt: prompt and ordinals are matched with "/"
-			local function slashes(text)
-				return (text:gsub("\\_", "_"):gsub("\\", "/"))
-			end
-			local pickers = require("telescope.pickers")
-			local new_picker = pickers.new
-			pickers.new = function(opts, picker_opts, ...)
-				opts = opts or {}
-				opts.on_input_filter_cb = opts.on_input_filter_cb
-					or function(prompt)
-						return { prompt = slashes(prompt) }
-					end
-				local sorter = picker_opts and picker_opts.sorter
-				if sorter and not sorter._slashes then
-					local score, highlight = sorter.scoring_function, sorter.highlighter
-					sorter._slashes = true
-					sorter.scoring_function = function(self, prompt, line, ...)
-						return score(self, prompt, (line:gsub("\\", "/")), ...)
-					end
-					if highlight then
-						sorter.highlighter = function(self, prompt, display)
-							return highlight(self, prompt, (display:gsub("\\", "/")))
-						end
-					end
-				end
-				return new_picker(opts, picker_opts, ...)
-			end
-		end,
-	},
-	{
-		"nvim-telescope/telescope-fzf-native.nvim",
-		build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
-	},
-	{
-		"jiaoshijie/undotree",
-		dependencies = "nvim-lua/plenary.nvim",
-		config = function()
-			local undotree = require("undotree")
+      -- accept both slash styles (and markdown-escaped `\_`) in the prompt: prompt and ordinals are matched with "/"
+      local function slashes(text)
+        return (text:gsub("\\_", "_"):gsub("\\", "/"))
+      end
+      local pickers = require("telescope.pickers")
+      local new_picker = pickers.new
+      pickers.new = function(opts, picker_opts, ...)
+        opts = opts or {}
+        opts.on_input_filter_cb = opts.on_input_filter_cb
+            or function(prompt)
+              return { prompt = slashes(prompt) }
+            end
+        local sorter = picker_opts and picker_opts.sorter
+        if sorter and not sorter._slashes then
+          local score, highlight = sorter.scoring_function, sorter.highlighter
+          sorter._slashes = true
+          sorter.scoring_function = function(self, prompt, line, ...)
+            return score(self, prompt, (line:gsub("\\", "/")), ...)
+          end
+          if highlight then
+            sorter.highlighter = function(self, prompt, display)
+              return highlight(self, prompt, (display:gsub("\\", "/")))
+            end
+          end
+        end
+        return new_picker(opts, picker_opts, ...)
+      end
+    end,
+  },
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+  },
+  {
+    "jiaoshijie/undotree",
+    dependencies = "nvim-lua/plenary.nvim",
+    config = function()
+      local undotree = require("undotree")
 
-			undotree.setup({
-				float_diff = true, -- using float window previews diff, set this `true` will disable layout option
-				layout = "left_bottom", -- "left_bottom", "left_left_bottom"
-				position = "left", -- "right", "bottom"
-				ignore_filetype = {
-					"undotree",
-					"undotreeDiff",
-					"qf",
-					"TelescopePrompt",
-					"spectre_panel",
-					"tsplayground",
-				},
-				window = {
-					winblend = 0,
-				},
-				keymaps = {
-					["j"] = "move_next",
-					["k"] = "move_prev",
-					["gj"] = "move2parent",
-					["J"] = "move_change_next",
-					["K"] = "move_change_prev",
-					["<cr>"] = "action_enter",
-					["p"] = "enter_diffbuf",
-					["q"] = "quit",
-				},
-			})
-		end,
-		keys = { -- load the plugin only when using it's keybinding:
-			{ "<leader>u", "<cmd>lua require('undotree').toggle()<cr>", desc = "Undotree: Toggle" },
-		},
-	},
+      undotree.setup({
+        float_diff = true,  -- using float window previews diff, set this `true` will disable layout option
+        layout = "left_bottom", -- "left_bottom", "left_left_bottom"
+        position = "left",  -- "right", "bottom"
+        ignore_filetype = {
+          "undotree",
+          "undotreeDiff",
+          "qf",
+          "TelescopePrompt",
+          "spectre_panel",
+          "tsplayground",
+        },
+        window = {
+          winblend = 0,
+        },
+        keymaps = {
+          ["j"] = "move_next",
+          ["k"] = "move_prev",
+          ["gj"] = "move2parent",
+          ["J"] = "move_change_next",
+          ["K"] = "move_change_prev",
+          ["<cr>"] = "action_enter",
+          ["p"] = "enter_diffbuf",
+          ["q"] = "quit",
+        },
+      })
+    end,
+    keys = { -- load the plugin only when using it's keybinding:
+      { "<leader>u", "<cmd>lua require('undotree').toggle()<cr>", desc = "Undotree: Toggle" },
+    },
+  },
 }

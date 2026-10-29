@@ -13,7 +13,45 @@ return {
 			}
 			local default_sign_highlights = {}
 
-			gitsigns.setup()
+			gitsigns.setup({
+				on_attach = function(bufnr)
+					local function map(lhs, rhs, desc)
+						vim.keymap.set("n", lhs, rhs, { buffer = bufnr, desc = desc })
+					end
+
+					-- jump between hunks; in diff mode keep the built-in ]c / [c
+					map("]c", function()
+						if vim.wo.diff then
+							vim.cmd.normal({ "]c", bang = true })
+						else
+							gitsigns.nav_hunk("next")
+						end
+					end, "Gitsigns: Next hunk")
+					map("[c", function()
+						if vim.wo.diff then
+							vim.cmd.normal({ "[c", bang = true })
+						else
+							gitsigns.nav_hunk("prev")
+						end
+					end, "Gitsigns: Previous hunk")
+
+					map("<leader>gp", gitsigns.preview_hunk_inline, "Gitsigns: Preview hunk inline")
+
+					-- reset hunk under cursor; in visual mode reset only the selected lines
+					map("<leader>gu", gitsigns.reset_hunk, "Gitsigns: Reset hunk")
+					vim.keymap.set("v", "<leader>gu", function()
+						gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+					end, { buffer = bufnr, desc = "Gitsigns: Reset selected lines" })
+
+					-- whole-buffer inline diff: line colors, word diff, deleted lines
+					map("<leader>gi", function()
+						local on = not require("gitsigns.config").config.linehl
+						gitsigns.toggle_linehl(on)
+						gitsigns.toggle_word_diff(on)
+						gitsigns.toggle_deleted(on)
+					end, "Gitsigns: Toggle inline diff")
+				end,
+			})
 
 			for _, highlight in ipairs(sign_highlights) do
 				default_sign_highlights[highlight] = vim.api.nvim_get_hl(0, { name = highlight, link = false })

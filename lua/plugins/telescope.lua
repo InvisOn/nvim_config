@@ -32,7 +32,8 @@ return {
 				end
 			end
 
-			local live_grep = remember_prompt(builtin.live_grep)
+			-- local live_grep = remember_prompt(builtin.live_grep)
+			local live_grep = builtin.live_grep
 
 			vim.keymap.set("n", "<Leader>ff", function()
 				builtin.find_files({ hidden = false })

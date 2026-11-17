@@ -24,6 +24,10 @@ return {
 			vim.keymap.set("n", "<leader>uc", function()
 				vim.cmd.RustLsp({ "flyCheck", "run" })
 			end, { desc = "rust: flyCheck run" })
+
+			vim.keymap.set("n", "<leader>um", function()
+				vim.cmd.RustLsp("rebuildProcMacros")
+			end, { desc = "rust: rebuild proc macros" })
 		end,
 	},
 	{
